@@ -6,6 +6,7 @@ import csv
 import sys
 from os import path
 import musicbrainzngs as mb
+from termcolor import colored
 from geopy.geocoders import Nominatim
 from geopy.exc import GeocoderTimedOut
 import KEYS
@@ -113,6 +114,6 @@ def parseFromMusicbrainz(
                         art, info[0], info[1]
                     )
                     sys.stdout.write("\033[K") 
-                    print(txt, end='\r')
+                    print(colored(txt, 'blue'), end='\r')
                 out.write(txt+'\n')
                 
