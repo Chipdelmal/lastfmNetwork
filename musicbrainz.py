@@ -38,7 +38,12 @@ def geocodeEntries(info, geoSize=6):
 def getArtistInfo(artist, topGenres=3):
     srch = mb.search_artists(artist=artist).get('artist-list')
     if len(srch) > 0:
-        info = mb.search_artists(artist=artist).get('artist-list')[0]
+        # Scrape best artist match
+        arts = mb.search_artists(artist=artist).get('artist-list')
+        names = [i['name'] for i in arts]
+        ix = names.index(artist) if artist in names else -1
+        info = arts[ix] if (ix>=0) else arts[0]
+        # Get artist info
         (id, name, country, city, genre) = (
                 info.get('id'), info.get('name'), info.get('country'),
                 getArea(info), getTopGenres(info, topGenres=topGenres)
@@ -116,4 +121,7 @@ def parseFromMusicbrainz(
                     sys.stdout.write("\033[K") 
                     print(colored(txt, 'blue'), end='\r')
                 out.write(txt+'\n')
+        if verbose:
+            sys.stdout.write("\033[K") 
+            print("", end='\r')
                 

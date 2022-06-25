@@ -22,11 +22,11 @@ dataRaw = pd.read_csv(
     parse_dates=[3]
 )
 # Remove duplicate entries ---------------------------------------------------
-dataRaw = dataRaw.drop_duplicates()
+data = dataRaw.drop_duplicates()
 ##############################################################################
 # Process artists: remove artists present in the BAN list and fix names
 ##############################################################################
-data = aux.removeBanned(dataRaw, bans=ban.BAN)
+data = aux.removeBanned(data, bans=ban.BAN)
 data = aux.replace(data, ban.SWP_PRE, ('Artist', 'Artist'))
 ##############################################################################
 # Fix time information
