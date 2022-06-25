@@ -1,10 +1,16 @@
-
-import KEYS
+###############################################################################
+# Musicbrainz
+#   
+###############################################################################
+import csv
+import sys
+from os import path
 import musicbrainzngs as mb
 from geopy.geocoders import Nominatim
 from geopy.exc import GeocoderTimedOut
+import KEYS
+import auxiliary as aux
 geolocator = Nominatim(user_agent=KEYS.GEO_USR)
-
 
 def doGeocode(address):
     try:
@@ -12,7 +18,7 @@ def doGeocode(address):
     except (GeocoderTimedOut):
         return doGeocode(address)
 
-def geocodeEntries(info, geo_size=6):
+def geocodeEntries(info, geoSize=6):
     (tmp, p1, p2) = (info, info[1], info[2])
     if p1 is None:
         p1 = ''
@@ -20,12 +26,12 @@ def geocodeEntries(info, geo_size=6):
         p2 = ''
     location = doGeocode(p1 + ' ' + p2)
     if location is None:
-        tmp.extend(geo_size*[None])
+        tmp.extend(geoSize*[None])
     else:
         tmp.extend([location.latitude, location.longitude])
         gcList = [i.strip() for i in location.address.split(',')]
         gcList.reverse()
-        tmp.extend(padList(gcList, geo_size))
+        tmp.extend(aux.padList(gcList, geoSize))
     return tmp
 
 def getArtistInfo(artist, topGenres=3):
@@ -44,11 +50,6 @@ def getArtistInfo(artist, topGenres=3):
         tmp.extend(topGenres * [None])
         return tmp
 
-def padList(lst, n):
-    lst.extend([None] * n)
-    lst = lst[:n]
-    return lst
-
 def getTopGenres(info, topGenres=3):
     tags = info.get('tag-list')
     # Check that genres are available
@@ -62,7 +63,7 @@ def getTopGenres(info, topGenres=3):
             return [i[1] for i in lst[0:topGenres]]
         else:
             tmp = [i[1] for i in lst[0:len(lst)]]
-            return padList(tmp, topGenres)
+            return aux.padList(tmp, topGenres)
     else:
         return [None] * topGenres
 
@@ -83,3 +84,35 @@ def generateMBHeader(topGenres, geoSize):
     partA.extend(['Lat', 'Lon'])
     partA.extend(geoPad)
     return partA
+
+def parseFromMusicbrainz(
+        clnData, dataPath, username,
+        topGenres=3, geoSize=6, verbose=True
+    ):
+    artists = sorted(clnData['Artist'].unique())
+    artNum = len(artists)
+    # Generate output path
+    FILE_PATH = path.join(dataPath, username)
+    # print('Parsing from musicbranz!\n')
+    with open(FILE_PATH + '_mbz.csv', mode='w') as mbFile:
+        mbWriter = csv.writer(
+            mbFile, quoting=csv.QUOTE_MINIMAL
+        )
+        header = generateMBHeader(topGenres, geoSize)
+        mbWriter.writerow(header)
+        with open(FILE_PATH + '_dbg.txt', 'w') as out:
+            for (i, art) in enumerate(artists):
+                # Parse musicbranz database
+                info = getArtistInfo(art, topGenres=topGenres)
+                info = geocodeEntries(info)
+                # print(info)
+                mbWriter.writerow(info)
+                if verbose:
+                    txt = '* {}/{}: {} [{} - {}]'.format(
+                        str(i+1).zfill(3), str(artNum).zfill(3), 
+                        art, info[0], info[1]
+                    )
+                    sys.stdout.write("\033[K") 
+                    print(txt, end='\r')
+                out.write(txt+'\n')
+                
