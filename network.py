@@ -1,7 +1,11 @@
+###############################################################################
+# Network
+#   Functions needed to do network and transitions matrices transformations
+###############################################################################
+
 import numpy as np
 from termcolor import colored
 from datetime import timedelta
-
 
 def calcTransitionsMatrix(
         inMat, scrobblesDF, artists,

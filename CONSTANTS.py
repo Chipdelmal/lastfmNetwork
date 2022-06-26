@@ -1,6 +1,6 @@
 ##############################################################################
 # Constants
-#   
+#   General constants common for all the scripts
 ##############################################################################
 from datetime import date, timedelta
 

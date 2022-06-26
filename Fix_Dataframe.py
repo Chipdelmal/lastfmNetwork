@@ -1,6 +1,7 @@
 ##############################################################################
-# Filter Dataframes
-#   
+# Fix Dataframes
+#   Filters a dataframe between dates, checks for inflated counts, and 
+#   amends artists names to match musicbrainz tags
 ##############################################################################
 from os import path
 from sys import argv

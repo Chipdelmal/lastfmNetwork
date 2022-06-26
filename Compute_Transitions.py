@@ -1,6 +1,8 @@
 ##############################################################################
-# Transitions Matrix
-#   
+# Compute Transitions
+#   Calculates transitions matrix (both in frequency and probability) for
+#   top N artists through a weighted window. Please have a look at:
+#   https://chipdelmal.github.io/dataViz/2022-06-17-LastfmNetwork.html
 ##############################################################################
 from sys import argv
 from os import path

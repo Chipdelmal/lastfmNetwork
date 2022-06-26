@@ -1,6 +1,7 @@
 ##############################################################################
 # Last.fm: Clean
-#   
+#   Takes the raw last.fm data from the csv, removes duplicates, removes
+#   banned artists, and converts into a timezone
 ##############################################################################
 from os import path
 from sys import argv

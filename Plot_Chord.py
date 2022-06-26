@@ -1,6 +1,7 @@
 ##############################################################################
 # Chord Diagram
-#   
+#   Exports a chord diagram with a given number of artists and a window range
+#   (as exported by "Compute_Transitions.py")
 ##############################################################################
 import numpy as np
 import pandas as pd

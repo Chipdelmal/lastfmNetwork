@@ -1,6 +1,6 @@
 ##############################################################################
 # Musicbrainz: Download
-#   
+#   Downloads artists' data from musibrainz into a CSV file
 ##############################################################################
 from os import path
 from sys import argv

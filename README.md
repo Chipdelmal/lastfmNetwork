@@ -75,16 +75,47 @@ Which launches the following scripts in order:
 ```bash
 python Clean_Lastfm.py 'chipmaligno' './data'
 python Download_Musicbrainz.py 'chipmaligno' './data'
-python Filter_Dataframe.py 'chipmaligno' './data'
+python Fix_Dataframe.py 'chipmaligno' './data'
 ```
 
 
 ### 2. Generating Matrices
 
-```bash
-./GenerateMatrices.sh 'chipmaligno' '.' 100 10
-```
+Generating the transitions matrices can be done with the following command:
 
 ```bash
+./GenerateMatrices.sh 'chipmaligno' '.' 100 5
+```
+
+Which launches the following script ranging from 1 to 5 in the window size:
+
+```bash
+python Compute_Transitions.py 'chipmaligno' './data' './cache' 100 1
+...
 python Compute_Transitions.py 'chipmaligno' './data' './cache' 100 5
 ```
+
+<hr>
+
+## Files' Description
+
+
+### Main Routines
+
+* `Clean_Lastfm.py`: Takes the raw last.fm data from the csv, removes duplicates, removes banned artists, and converts into a timezone
+* `Download_Musicbrainz.py`: Downloads artists' data from musibrainz into a CSV file.
+* `Fix_Dataframe.py`: Filters a dataframe between dates, checks for inflated counts, and amends artists names to match musicbrainz tags.
+* `Compute_Transitions.py`: Calculates transitions matrix (both in frequency and probability) for top N artists through a weighted window. Please have a look at my [blogpost](https://chipdelmal.github.io/dataViz/2022-06-17-LastfmNetwork.html).
+* `Plot_Chord.py`: Exports a chord diagram with a given number of artists and a window range (as exported by `Compute_Transitions.py`).
+
+### Functions Files
+
+* `auxiliary.py`: Non-specific functions needed by routines.
+* `musicbrainz.py`: Functions needed to scrape artists' data.
+* `network.py`: Functions needed to do network and transitions matrices transformations.
+
+### Constants
+
+* `CONSTANTS.py`: General constants common for all the scripts.
+* `BANS.py`: Dictionaries and sets that contain bans and fixes for artists' names.
+* `KEYS.py`: Musicbrainz app keys and login information.
