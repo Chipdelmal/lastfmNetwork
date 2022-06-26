@@ -9,5 +9,22 @@ To clean the original dataset from Last.fm, download artists' information from M
 
 
 ```bash
-./GenerateDatasets.sh 'chipmaligno' './data'
+./GenerateDatasets.sh 'chipmaligno' '.'
+```
+
+```bash
+python Clean_Lastfm.py 'chipmaligno' './data'
+python Download_misucbrainz.py 'chipmaligno' './data'
+python Filter_Dataframe.py 'chipmaligno' './data'
+```
+
+
+## Generating Matrices
+
+```bash
+./GenerateMatrices.sh 'chipmaligno' '.' 100 10
+```
+
+```bash
+python Compute_Transitions.py 'chipmaligno' './data' './cache' 100 5
 ```

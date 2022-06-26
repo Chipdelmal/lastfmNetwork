@@ -12,11 +12,11 @@ import CONSTANTS as cst
 
 if aux.isnotebook():
     (USERNAME, PTH_DTA, PTH_CHE, TOP, WRAN) = (
-        'chipmaligno', './data', './cache', 50, 5
+        'chipmaligno', './data', './cache', 100, 5
     )
 else:
-    (USERNAME, PTH_DTA, TOP, WRAN) = (
-        argv[1], argv[2], int(argv[3]), int(argv[4])
+    (USERNAME, PTH_DTA, PTH_CHE, TOP, WRAN) = (
+        argv[1], argv[2], argv[3], int(argv[4]), int(argv[5])
     )
 ###############################################################################
 # Read Data
@@ -48,3 +48,4 @@ pMat = ntw.normalizeMatrix(tMat)
 fName = '{}_{:04}-{:02}'.format(USERNAME, TOP, WRAN)
 np.save(path.join(PTH_CHE, fName+'_Fmat'), tMat)
 np.save(path.join(PTH_CHE, fName+'_Pmat'), pMat)
+artsCount.iloc[:TOP].to_csv(path.join(PTH_CHE, fName+'_top.csv'), index=False)

@@ -1,6 +1,7 @@
 import numpy as np
 from datetime import timedelta
 
+
 def calcTransitionsMatrix(
         inMat, scrobblesDF, artists,
         window=1, timeThreshold=timedelta(minutes=30), 
@@ -19,9 +20,9 @@ def calcTransitionsMatrix(
             (px0, px1) = [artists.index(artName) for artName in (pa0, pa1)]
             tMat[px0, px1] = (tMat[px0, px1] + 1)
         if verbose:
-            print(f'Processing: {ix}/{playNum}', end='\r')
+            print(f'* Processing: {ix}/{playNum-window}', end='\r')
     return tMat
-
+ 
 def calcWeightedTransitionsMatrix(
         scrobblesDF, artists,
         windowRange=(1, 2), timeThreshold=timedelta(minutes=30), 

@@ -4,6 +4,7 @@
 ###############################################################################
 import os
 import warnings
+import matplotlib.colors as mcolors
 warnings.filterwarnings("ignore")
 
 def isnotebook():
@@ -42,3 +43,9 @@ def makeFolder(path):
             raise OSError(
                 "Can't create destination directory (%s)!" % (path)
             )
+    
+def colorPaletteFromHexList(clist):
+    c = mcolors.ColorConverter().to_rgb
+    clrs = [c(i) for i in clist]
+    rvb = mcolors.LinearSegmentedColormap.from_list("", clrs)
+    return rvb

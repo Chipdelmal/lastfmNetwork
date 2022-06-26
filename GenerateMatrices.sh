@@ -5,6 +5,8 @@
 ###############################################################################
 USRM=$1
 PTHO=$2
+TOPA=$3
+WRAN=$4
 
 ###############################################################################
 # Terminal Colors
@@ -14,9 +16,11 @@ NCL='\033[0m'
 ###############################################################################
 # Run Scripts
 ###############################################################################
-printf "${RED}* Cleaning Last.fm's dataset...${NCL}\n"
-python Clean_Lastfm.py "$USRM" "$PTHO/data"
-printf "${RED}* Downloading Musicbrainz artists' data...${NCL}\n"
-python Download_Musicbrainz.py "$USRM" "$PTHO/data"
-printf "${RED}* Filtering and amending dataframe...${NCL}\n"
-python Filter_Dataframe.py "$USRM" "$PTHO/data"
+# for top in 25 50 100 150 200 250 300 350 400
+# do
+for (( n=1; n<=$WRAN; n++ ))
+do
+    printf "${RED}* Generating Transitions [${TOPA}:${n}]...${NCL}\n"
+    python Compute_Transitions.py $USRM "$PTHO/data" "$PTHO/cache" $TOPA $n
+done
+# done
