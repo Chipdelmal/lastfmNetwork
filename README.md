@@ -59,7 +59,9 @@ These pipelines are easiest to use by following the folder structure:
 
 <hr>
 
-## 1. Cleaning the Dataset
+## Use
+
+### 1. Cleaning the Dataset
 
 To clean the original dataset from Last.fm, download artists' information from Musicbrainz, and amend the artists in Last.fm data with Musicbrainz tags; run:
 
@@ -77,7 +79,7 @@ python Filter_Dataframe.py 'chipmaligno' './data'
 ```
 
 
-## 2. Generating Matrices
+### 2. Generating Matrices
 
 ```bash
 ./GenerateMatrices.sh 'chipmaligno' '.' 100 10
