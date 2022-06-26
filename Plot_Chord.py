@@ -10,12 +10,14 @@ from sys import argv
 from matplotlib import colors
 import matplotlib.pyplot as plt
 from mpl_chord_diagram import chord_diagram
-import auxiliary as aux
+import chord as chd
+import network as ntw
 import CONSTANTS as cst
+import auxiliary as aux
 
 if aux.isnotebook():
-    (USERNAME, PTH_CHE, PTH_IMG, TOP, WRAN, ID) = (
-        'chipmaligno', './cache', './img', 25, 5, 'Frequency'
+    (USERNAME, PTH_CHE, PTH_IMG, TOP, WRAN, TRANS_TYPE) = (
+        'chipmaligno', './cache', './img', 25, 5, 'Probability'
     )
 else:
     (USERNAME, PTH_CHE, PTH_IMG, TOP, WRAN, ID) = (
@@ -45,28 +47,33 @@ pColors = [colorPalette(norm(i)) for i in selfProb]
 ###############################################################################
 # Patch Matrix
 ###############################################################################
-if ID=='Frequency':
+if TRANS_TYPE=='Frequency':
     cMat = F_MAT.copy()
     np.fill_diagonal(cMat, 0)
 else:
     cMat = P_MAT.copy()
     np.fill_diagonal(cMat, 0)
+    cMat = ntw.normalizeMatrix(cMat)
 artsTop = A_TOP['Artist']
 ###############################################################################
 # Plot Diagram
 ###############################################################################
-chord_diagram(
+pad = 1.5
+ax = chd.chord_modded(
     cMat, 
     names=artsTop[:TOP], 
     rotate_names=[True]*TOP,
-    alpha=.65, pad=.5, gap=0.05,
+    alpha=.65, pad=.5, gap=0.05, fontsize=2.25,
     fontcolor='k', chordwidth=.7, width=0.1, 
-    extent=360, fontsize=2.25, start_at=0,
+    extent=360, start_at=0,
     colors=pColors, use_gradient=True
 )
+ax.set_xlim(-pad, pad)
+ax.set_ylim(-pad, pad)
+ax.axis('off')
 fName = 'Chord_{:04d}-{:02d}_{}.png'
 plt.savefig(
-    path.join(PTH_IMG, fName.format(TOP, WRAN, ID[0])),
+    path.join(PTH_IMG, fName.format(TOP, WRAN, TRANS_TYPE[0])),
     dpi=750, transparent=True, facecolor='w', 
     bbox_inches='tight'
 )

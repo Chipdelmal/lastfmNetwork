@@ -1,6 +1,5 @@
 # Last.fm Network Analysis
 
-## Download Last.fm History
 
 Download your [Last.fm](https://www.last.fm/home) history through [lastfm-to-csv](https://benjaminbenben.com/lastfm-to-csv/) and place it in the `/data` folder.
 
