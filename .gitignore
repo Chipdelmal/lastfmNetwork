@@ -1,7 +1,11 @@
-# Output Folders
-img/
-data/
-cache/
+# Output Folders and Files
+# img/
+# data/
+# cache/
+*.png
+*.csv
+*.txt
+*.npy
 
 # Personal Files
 KEYS.py

@@ -3,9 +3,22 @@
 
 [lastfm-to-csv](https://benjaminbenben.com/lastfm-to-csv/)
 
-## Setting Up Folders and Constants
+## Setting Up Keys, Folders and Constants
+
+### Keys
+
+Create a [Musicbrainz API](https://musicbrainz.org/doc/MusicBrainz_API) account and application, then create a file named `KEYS.py` file with the contents:
+
+```python
+# KEYS.py
+(MB_NM, MB_V, MB_URL) = (<MUSICBRAINZ_APP_NAME>, "0.1", <USER_HOMEPAGE>)
+(MB_USR, MB_PSW) = (<USERNAME>, <PASSWORD>)
+GEO_USR = 'test'
+```
 
 ### Folders
+
+These pipelines are easiest to use by creating the following structure 
 
 ```
 ./data
