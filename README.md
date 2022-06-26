@@ -4,12 +4,13 @@
 
 Download your [Last.fm](https://www.last.fm/home) history through [lastfm-to-csv](https://benjaminbenben.com/lastfm-to-csv/) and place it in the `/data` folder.
 
+<hr>
 
-## Setting Up Keys, Bans, Folders and Constants
+## Setting Things Up
 
 ### Keys
 
-Create a [Musicbrainz API](https://musicbrainz.org/doc/MusicBrainz_API) account and application, then create a file named `KEYS.py` file with the contents:
+Create a [Musicbrainz API](https://musicbrainz.org/doc/MusicBrainz_API) account and application, then **create** a file named `KEYS.py` file with the contents:
 
 ```python
 ###############################################################################
@@ -22,7 +23,7 @@ GEO_USR = 'test'
 
 ### Bans
 
-To help cleanup the original last.fm dataset, these scripts also require a `BANS.py` file with contents similar to the following:
+To help cleanup the original last.fm dataset, these scripts also require the **creation** of a `BANS.py` file with contents similar to the following:
 
 ```python
 ###############################################################################
@@ -45,7 +46,7 @@ SWP_PRE = {
 
 ### Folders
 
-These pipelines are easiest to use by creating the following structure 
+These pipelines are easiest to use by following the folder structure: 
 
 ```
 ./data
@@ -56,11 +57,9 @@ These pipelines are easiest to use by creating the following structure
     - Images and plots will be exported here
 ```
 
-### Constants and Bans
+<hr>
 
-
-
-## Cleaning the Dataset
+## 1. Cleaning the Dataset
 
 To clean the original dataset from Last.fm, download artists' information from Musicbrainz, and amend the artists in Last.fm data with Musicbrainz tags; run:
 
@@ -69,6 +68,8 @@ To clean the original dataset from Last.fm, download artists' information from M
 ./GenerateDatasets.sh 'chipmaligno' '.'
 ```
 
+Which launches the following scripts in order:
+
 ```bash
 python Clean_Lastfm.py 'chipmaligno' './data'
 python Download_Musicbrainz.py 'chipmaligno' './data'
@@ -76,7 +77,7 @@ python Filter_Dataframe.py 'chipmaligno' './data'
 ```
 
 
-## Generating Matrices
+## 2. Generating Matrices
 
 ```bash
 ./GenerateMatrices.sh 'chipmaligno' '.' 100 10
