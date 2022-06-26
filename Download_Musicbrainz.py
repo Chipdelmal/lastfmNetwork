@@ -11,7 +11,7 @@ import auxiliary as aux
 import musicbrainz as mbz
 
 if aux.isnotebook():
-    (USERNAME, PTH_DTA) = ('chipmaligno', './dta')
+    (USERNAME, PTH_DTA) = ('chipmaligno', './data')
 else:
     (USERNAME, PTH_DTA) = argv[1:]
 ##############################################################################

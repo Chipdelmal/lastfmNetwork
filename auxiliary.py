@@ -2,6 +2,7 @@
 # Auxiliary
 #   
 ###############################################################################
+import os
 import warnings
 warnings.filterwarnings("ignore")
 
@@ -32,3 +33,12 @@ def replace(dataframe, replacementDict, columnNames):
         repSet = repDict[cat]
         df.loc[df[col[0]].isin(repSet), col[1]] = cat
     return df
+
+def makeFolder(path):
+    if not os.path.exists(path):
+        try:
+            os.mkdir(path)
+        except OSError:
+            raise OSError(
+                "Can't create destination directory (%s)!" % (path)
+            )

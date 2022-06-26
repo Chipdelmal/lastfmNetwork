@@ -10,7 +10,7 @@ import auxiliary as aux
 import CONSTANTS as cst
 
 if aux.isnotebook():
-    (USERNAME, PTH_DTA) = ('chipmaligno', './dta')
+    (USERNAME, PTH_DTA) = ('chipmaligno', './data')
 else:
     (USERNAME, PTH_DTA) = argv[1:]
 ##############################################################################

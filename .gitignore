@@ -1,6 +1,7 @@
 # Output Folders
 img/
-dta/
+data/
+cache/
 
 # Personal Files
 KEYS.py
