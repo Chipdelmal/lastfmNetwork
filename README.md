@@ -1,19 +1,46 @@
 # Last.fm Network Analysis
 
+## Download Last.fm History
 
-[lastfm-to-csv](https://benjaminbenben.com/lastfm-to-csv/)
+Download your [Last.fm](https://www.last.fm/home) history through [lastfm-to-csv](https://benjaminbenben.com/lastfm-to-csv/) and place it in the `/data` folder.
 
-## Setting Up Keys, Folders and Constants
+
+## Setting Up Keys, Bans, Folders and Constants
 
 ### Keys
 
 Create a [Musicbrainz API](https://musicbrainz.org/doc/MusicBrainz_API) account and application, then create a file named `KEYS.py` file with the contents:
 
 ```python
+###############################################################################
 # KEYS.py
+###############################################################################
 (MB_NM, MB_V, MB_URL) = (<MUSICBRAINZ_APP_NAME>, "0.1", <USER_HOMEPAGE>)
 (MB_USR, MB_PSW) = (<USERNAME>, <PASSWORD>)
 GEO_USR = 'test'
+```
+
+### Bans
+
+To help cleanup the original last.fm dataset, these scripts also require a `BANS.py` file with contents similar to the following:
+
+```python
+###############################################################################
+# BANS.py
+###############################################################################
+# The following set of names will be excluded from parsing and analysis
+#   (this happens before musicbrainz data)
+BAN = set([
+    'Nature Publishing Group', 'Douglas Adams',
+    "The Skeptics' Guide to the Universe", 'chipdelmal'
+])
+# The following dictionary will replace the artists name on the sets with the
+#   name defined by the entry key
+SWP_PRE = {
+    'Courteeners': {'The Courteeners', 'Courteeners'},
+    'Belle & Sebastian': {'Belle & Sebastian', 'Belle Sebastian'},
+    'The Smashing Pumpkins': {'Smashing Pumpkins'},
+}
 ```
 
 ### Folders
