@@ -61,7 +61,7 @@ chord_diagram(
     alpha=.65, pad=.5, gap=0.05,
     fontcolor='k', chordwidth=.7, width=0.1, 
     extent=360, fontsize=2.25, start_at=0,
-    colors=pColors, use_gradient=False
+    colors=pColors, use_gradient=True
 )
 fName = 'Chord_{:04d}-{:02d}_{}.png'
 plt.savefig(

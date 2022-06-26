@@ -1,4 +1,5 @@
 import numpy as np
+from termcolor import colored
 from datetime import timedelta
 
 
@@ -20,7 +21,8 @@ def calcTransitionsMatrix(
             (px0, px1) = [artists.index(artName) for artName in (pa0, pa1)]
             tMat[px0, px1] = (tMat[px0, px1] + 1)
         if verbose:
-            print(f'* Processing: {ix}/{playNum-window}', end='\r')
+            txt = f'* Processing: {ix}/{playNum-window}'
+            print(colored(txt, 'blue'), end='\r')
     return tMat
  
 def calcWeightedTransitionsMatrix(
