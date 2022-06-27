@@ -17,7 +17,7 @@ import auxiliary as aux
 
 if aux.isnotebook():
     (USERNAME, PTH_CHE, PTH_IMG, TOP, WRAN, TRANS_TYPE) = (
-        'chipmaligno', './cache', './img', 25, 5, 'Probability'
+        'chipmaligno', './cache', './img', 100, 5, 'Frequency'
     )
 else:
     (USERNAME, PTH_CHE, PTH_IMG, TOP, WRAN, ID) = (
@@ -47,14 +47,16 @@ pColors = [colorPalette(norm(i)) for i in selfProb]
 ###############################################################################
 # Patch Matrix
 ###############################################################################
+artsTop = A_TOP['Artist']
 if TRANS_TYPE=='Frequency':
     cMat = F_MAT.copy()
     np.fill_diagonal(cMat, 0)
+    fontSize = np.interp(TOP, (25, 100, 150), (3, 1.75, 1.25))
 else:
     cMat = P_MAT.copy()
     np.fill_diagonal(cMat, 0)
     cMat = ntw.normalizeMatrix(cMat)
-artsTop = A_TOP['Artist']
+    fontSize = np.interp(TOP, (25, 100, 150), (4, 1.75, 1.25))
 ###############################################################################
 # Plot Diagram
 ###############################################################################
@@ -63,7 +65,7 @@ ax = chd.chord_modded(
     cMat, 
     names=artsTop[:TOP], 
     rotate_names=[True]*TOP,
-    alpha=.65, pad=.5, gap=0.05, fontsize=2.25,
+    alpha=.65, pad=.5, gap=0.05, fontsize=fontSize,
     fontcolor='k', chordwidth=.7, width=0.1, 
     extent=360, start_at=0,
     colors=pColors, use_gradient=True
@@ -71,10 +73,10 @@ ax = chd.chord_modded(
 ax.set_xlim(-pad, pad)
 ax.set_ylim(-pad, pad)
 ax.axis('off')
-fName = 'Chord_{:04d}-{:02d}_{}.png'
+fName = 'Chord_{:04d}-{:02d}_{}.png'.format(TOP, WRAN, TRANS_TYPE[0])
 plt.savefig(
-    path.join(PTH_IMG, fName.format(TOP, WRAN, TRANS_TYPE[0])),
-    dpi=750, transparent=True, facecolor='w', 
+    path.join(PTH_IMG, fName),
+    dpi=1000, transparent=True, facecolor='w', 
     bbox_inches='tight'
 )
 plt.close('all')
