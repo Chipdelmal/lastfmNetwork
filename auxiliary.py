@@ -45,7 +45,7 @@ def makeFolder(path):
             )
     
 def colorPaletteFromHexList(clist):
-    c = mcolors.ColorConverter().to_rgb
+    c = mcolors.ColorConverter().to_rgba
     clrs = [c(i) for i in clist]
     rvb = mcolors.LinearSegmentedColormap.from_list("", clrs)
     return rvb

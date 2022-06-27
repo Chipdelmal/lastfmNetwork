@@ -14,7 +14,7 @@ import CONSTANTS as cst
 
 if aux.isnotebook():
     (USERNAME, PTH_DTA, PTH_CHE, TOP, WRAN) = (
-        'chipmaligno', './data', './cache', 100, 5
+        'chipmaligno', './data', './cache', 25, 5
     )
 else:
     (USERNAME, PTH_DTA, PTH_CHE, TOP, WRAN) = (

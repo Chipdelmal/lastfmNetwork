@@ -12,4 +12,5 @@ DF_DTE_RANGE = (date(2010, 1, 1), date(2050, 1, 1))
 # Colors
 ##############################################################################
 C_NBLUE_LBLUE = ['#04067B', '#bdedf6']
+C_WHITE_MGNTA = ['#fdfffc00', '#ff006eAA']
 C_MAGNT_PRPLE = ['#ff006e', '#fdfffc', '#3a0ca3']

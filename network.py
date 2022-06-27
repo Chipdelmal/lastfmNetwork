@@ -21,7 +21,7 @@ def calcTransitionsMatrix(
         # Check if both artists are in the top set , and time between is low --
         pTop = (pa0 in artists) and (pa1 in artists)
         pTime = (pl0['Date']-pl1['Date']) <= timeThreshold
-        if pTop:
+        if pTop and pTime:
             (px0, px1) = [artists.index(artName) for artName in (pa0, pa1)]
             tMat[px0, px1] = (tMat[px0, px1] + 1)
         if verbose:
