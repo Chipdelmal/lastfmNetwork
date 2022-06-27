@@ -106,6 +106,7 @@ python Compute_Transitions.py 'chipmaligno' './data' './cache' 100 5
 * `Fix_Dataframe.py`: Filters a dataframe between dates, checks for inflated counts, and amends artists names to match musicbrainz tags.
 * `Compute_Transitions.py`: Calculates transitions matrix (both in frequency and probability) for top N artists through a weighted window. Please have a look at my [blogpost](https://chipdelmal.github.io/dataViz/2022-06-17-LastfmNetwork.html).
 * `Plot_Chord.py`: Exports a chord diagram with a given number of artists and a window range (as exported by `Compute_Transitions.py`).
+* `Markov_Playlist.py`: Generates a playlist purely based on a Markov random walker process based on the artists probability matrix and song frequencies.
 
 ### Functions Files
 

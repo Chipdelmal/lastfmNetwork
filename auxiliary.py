@@ -49,3 +49,4 @@ def colorPaletteFromHexList(clist):
     clrs = [c(i) for i in clist]
     rvb = mcolors.LinearSegmentedColormap.from_list("", clrs)
     return rvb
+
