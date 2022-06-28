@@ -14,14 +14,14 @@ import CONSTANTS as cst
 import auxiliary as aux
 import markov as mkv
 
-if aux.isnotebook():
-    (USERNAME, PTH_DTA, PTH_CHE, PTH_IMG, TOP, WRAN) = (
-        'chipmaligno', './data', './cache', './img', 100, 3
-    )
-else:
-    (USERNAME, PTH_DTA, PTH_CHE, PTH_IMG, TOP, WRAN) = (
-        argv[1], argv[2], argv[3], argv[4], int(argv[5]), int(argv[6])
-    )
+#if aux.isnotebook():
+(USERNAME, PTH_DTA, PTH_CHE, PTH_IMG, TOP, WRAN) = (
+    'chipmaligno', './data', './cache', './img', 100, 3
+)
+# else:
+#     (USERNAME, PTH_DTA, PTH_CHE, PTH_IMG, TOP, WRAN) = (
+#         argv[1], argv[2], argv[3], argv[4], int(argv[5]), int(argv[6])
+#     )
 # Internal Constants ----------------------------------------------------------
 (SELF_LOOP, CSCALE) = (False, 'Linear')
 ###############################################################################
@@ -38,8 +38,8 @@ A_TOP = pd.read_csv(path.join(PTH_CHE, fName+'_top.csv'))
 # Numpy array shape -----------------------------------------------------------
 (to, tf) = (min(DTA_CLN['Date']), max(DTA_CLN['Date']))
 daysTotal = (tf-to).days
-artists = sorted(list(A_TOP['Artist'])) # sorted(list(DTA_CLN['Artist'].unique()))
-countsArray = np.empty([len(artists), daysTotal])
+artists = sorted(list(DTA_CLN['Artist'].unique())) # sorted(list(A_TOP['Artist'])) # 
+countsArray = np.zeros([len(artists), daysTotal], dtype=np.int16)
 # Daily intervals -------------------------------------------------------------
 dteCpy = DTA_CLN['Date'].copy()
 DTA_CLN['Interval'] = pd.to_datetime(dteCpy, errors='coerce', utc=True)
@@ -63,29 +63,60 @@ for (ix, art) in enumerate(artists):
 ###############################################################################
 # Plot Scatter
 ###############################################################################
-# norm = colors.LogNorm(vmin=1, vmax=5)
-norm = colors.Normalize(vmin=0, vmax=25) # np.max(countsArray))
-colorPalette = aux.colorPaletteFromHexList(cst.C_WHITE_NBLUE)
+norm = colors.LogNorm(vmin=1, vmax=50)
+# norm = colors.Normalize(vmin=0, vmax=50) # np.max(countsArray))
+colorPalA = aux.colorPaletteFromHexList(cst.C_WHITE_NBLUE)
+colorPalB = aux.colorPaletteFromHexList(cst.C_WHITE_MGNTA)
 # Iterate through artists -----------------------------------------------------
-r = 100
-pad = 20
-(fig, ax) = plt.subplots()
-for (r, _) in enumerate(artists[:]):
-    clrs = [colorPalette(norm(i)) for i in countsArray[r]]
-    ax.scatter(
-        [i*r for i in range(daysTotal)], 
-        [r]*daysTotal,
-        c=clrs,
-        s=1,
-    )
-ax.set_aspect(.001/ax.get_data_ratio())
-ax.set_xlim(-pad, daysTotal+pad)
-ax.set_ylim(-pad/2, len(artists)+pad/2)
+# r = 10
+# pad = 20
+# (fig, ax) = plt.subplots()
+# for (r, _) in enumerate(artists[:]):
+#     clrs = [colorPalette(norm(i)) for i in countsArray[r]]
+#     ax.scatter(
+#         [i*r for i in range(daysTotal)], 
+#         [r]*daysTotal,
+#         c=clrs,
+#         s=1,
+#     )
+# ax.set_aspect(.001/ax.get_data_ratio())
+# ax.set_xlim(-pad, daysTotal+pad)
+# ax.set_ylim(-pad/2, len(artists)+pad/2)
+# ax.axis('off')
+# fName = 'Scatter.png'
+# plt.savefig(
+#     path.join(PTH_IMG, fName),
+#     dpi=1000, transparent=True, facecolor='w', 
+#     bbox_inches='tight'
+# )
+# plt.close('all')
+# Iterate through artists -----------------------------------------------------
+r = 10
+yPad = 4
+pad = 10
+(fig, ax) = plt.subplots(figsize=(10,6))
+for (r, art) in enumerate(artists[:]):
+    clr = colorPalA if r % 2 == 0 else colorPalB
+    # ax.text(
+    #     -2, r*yPad, art, fontsize=1, color='w', 
+    #     horizontalalignment='right',
+    #     verticalalignment='center'
+    # )
+    for day in np.nonzero(countsArray[r])[0]:
+        plt.plot(
+            [day, day+25], [r+r*yPad-2.5, r+r*yPad+2.5],
+            color=clr(norm(countsArray[r][day])),
+            lw=.25
+        )
+ax.set_aspect(1/ax.get_data_ratio())
+ax.set_facecolor('k')
+ax.set_xlim(-pad, daysTotal+pad*10)
+ax.set_ylim(-pad, len(artists)+pad)
 ax.axis('off')
 fName = 'Scatter.png'
 plt.savefig(
     path.join(PTH_IMG, fName),
-    dpi=1000, transparent=True, facecolor='w', 
+    dpi=1000, transparent=True, facecolor='k', 
     bbox_inches='tight'
 )
 plt.close('all')
