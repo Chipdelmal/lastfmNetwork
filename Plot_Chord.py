@@ -17,10 +17,10 @@ import auxiliary as aux
 
 if aux.isnotebook():
     (USERNAME, PTH_CHE, PTH_IMG, TOP, WRAN, TRANS_TYPE) = (
-        'chipmaligno', './cache', './img', 300, 5, 'Frequency'
+        'chipmaligno', './cache', './img', 100, 5, 'Frequency'
     )
 else:
-    (USERNAME, PTH_CHE, PTH_IMG, TOP, WRAN, ID) = (
+    (USERNAME, PTH_CHE, PTH_IMG, TOP, WRAN, TRANS_TYPE) = (
         argv[1], argv[2], argv[3], int(argv[4]), int(argv[5]), argv[6]
     )
 # Internal Constants ----------------------------------------------------------
@@ -51,7 +51,9 @@ artsTop = A_TOP['Artist']
 if TRANS_TYPE=='Frequency':
     cMat = F_MAT.copy()
     np.fill_diagonal(cMat, 0)
-    fontSize = np.interp(TOP, (25, 100, 150, 300), (3, 1.75, 1.25, .9))
+    fontSize = np.interp(
+        TOP, (25, 100, 150, 300, 350), (3, 1.75, 1.25, .65, .45)
+    )
 else:
     cMat = P_MAT.copy()
     np.fill_diagonal(cMat, 0)

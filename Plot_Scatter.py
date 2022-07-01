@@ -8,7 +8,7 @@ from os import path
 from sys import argv
 from matplotlib import colors
 import matplotlib.pyplot as plt
-from datetime import datetime
+from datetime import datetime, timedelta
 from collections import Counter
 import CONSTANTS as cst
 import auxiliary as aux
@@ -16,14 +16,14 @@ import markov as mkv
 
 #if aux.isnotebook():
 (USERNAME, PTH_DTA, PTH_CHE, PTH_IMG, TOP, WRAN) = (
-    'chipmaligno', './data', './cache', './img', 100, 3
+    'chipmaligno', './data', './cache', './img', 600, 3
 )
 # else:
 #     (USERNAME, PTH_DTA, PTH_CHE, PTH_IMG, TOP, WRAN) = (
 #         argv[1], argv[2], argv[3], argv[4], int(argv[5]), int(argv[6])
 #     )
 # Internal Constants ----------------------------------------------------------
-(SELF_LOOP, CSCALE) = (False, 'Linear')
+(SELF_LOOP, CSCALE, SORTED) = (False, 'Linear', True)
 ###############################################################################
 # Read Data
 ###############################################################################
@@ -38,7 +38,8 @@ A_TOP = pd.read_csv(path.join(PTH_CHE, fName+'_top.csv'))
 # Numpy array shape -----------------------------------------------------------
 (to, tf) = (min(DTA_CLN['Date']), max(DTA_CLN['Date']))
 daysTotal = (tf-to).days
-artists = sorted(list(DTA_CLN['Artist'].unique())) # sorted(list(A_TOP['Artist'])) # 
+# artists = sorted(list(DTA_CLN['Artist'].unique()))
+artists = sorted(list(A_TOP['Artist'])) if not SORTED else list(A_TOP['Artist'])
 countsArray = np.zeros([len(artists), daysTotal], dtype=np.int16)
 # Daily intervals -------------------------------------------------------------
 dteCpy = DTA_CLN['Date'].copy()
@@ -65,58 +66,50 @@ for (ix, art) in enumerate(artists):
 ###############################################################################
 norm = colors.LogNorm(vmin=1, vmax=50)
 # norm = colors.Normalize(vmin=0, vmax=50) # np.max(countsArray))
-colorPalA = aux.colorPaletteFromHexList(cst.C_WHITE_NBLUE)
-colorPalB = aux.colorPaletteFromHexList(cst.C_WHITE_MGNTA)
-# Iterate through artists -----------------------------------------------------
-# r = 10
-# pad = 20
-# (fig, ax) = plt.subplots()
-# for (r, _) in enumerate(artists[:]):
-#     clrs = [colorPalette(norm(i)) for i in countsArray[r]]
-#     ax.scatter(
-#         [i*r for i in range(daysTotal)], 
-#         [r]*daysTotal,
-#         c=clrs,
-#         s=1,
-#     )
-# ax.set_aspect(.001/ax.get_data_ratio())
-# ax.set_xlim(-pad, daysTotal+pad)
-# ax.set_ylim(-pad/2, len(artists)+pad/2)
-# ax.axis('off')
-# fName = 'Scatter.png'
-# plt.savefig(
-#     path.join(PTH_IMG, fName),
-#     dpi=1000, transparent=True, facecolor='w', 
-#     bbox_inches='tight'
-# )
-# plt.close('all')
 # Iterate through artists -----------------------------------------------------
 r = 10
 yPad = 4
-pad = 10
-(fig, ax) = plt.subplots(figsize=(10,6))
-for (r, art) in enumerate(artists[:]):
-    clr = colorPalA if r % 2 == 0 else colorPalB
+pad = 1
+cYear = to.year
+(fig, ax) = plt.subplots(figsize=(6, 10))
+for (r, art) in enumerate(artists):
+    clr = cst.MAPS[r%len(cst.MAPS)]
+    for day in np.nonzero(countsArray[r])[0]:
+        plt.plot(
+            [r-.225, r+.225], [day, day],
+            color=clr(norm(countsArray[r][day])),
+            lw=.2, zorder=5
+        )
+for d in range(len(countsArray[0])):
+    (tod, tfd) = (d, 0)
+    if (to+timedelta(int(d))).year > cYear:
+        plt.hlines(
+            d, -pad, len(artists)+pad, '#ffffff00', 
+            lw=.2, ls='-', zorder=-4
+        )
+        cYear += 1
+        ax.text(
+            -2, (d-tod)/2+tod+365/2, cYear, fontsize=5, 
+            color='w', 
+            horizontalalignment='right',
+            verticalalignment='center',
+            rotation=90
+        )
+        tod = d
     # ax.text(
     #     -2, r*yPad, art, fontsize=1, color='w', 
     #     horizontalalignment='right',
     #     verticalalignment='center'
     # )
-    for day in np.nonzero(countsArray[r])[0]:
-        plt.plot(
-            [day, day+25], [r+r*yPad-2.5, r+r*yPad+2.5],
-            color=clr(norm(countsArray[r][day])),
-            lw=.25
-        )
-ax.set_aspect(1/ax.get_data_ratio())
-ax.set_facecolor('k')
-ax.set_xlim(-pad, daysTotal+pad*10)
-ax.set_ylim(-pad, len(artists)+pad)
+ax.set_aspect(.5/ax.get_data_ratio())
+ax.set_facecolor('#000000')
+ax.set_xlim(-pad*2, len(artists)+pad)
+ax.set_ylim(-pad, daysTotal+pad)
 ax.axis('off')
 fName = 'Scatter.png'
 plt.savefig(
     path.join(PTH_IMG, fName),
-    dpi=1000, transparent=True, facecolor='k', 
+    dpi=500, transparent=True, facecolor='#000000', 
     bbox_inches='tight'
 )
 plt.close('all')
