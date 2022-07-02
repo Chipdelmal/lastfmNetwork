@@ -16,7 +16,7 @@ import markov as mkv
 
 #if aux.isnotebook():
 (USERNAME, PTH_DTA, PTH_CHE, PTH_IMG, TOP, WRAN) = (
-    'chipmaligno', './data', './cache', './img', 600, 3
+    'chipmaligno', './data', './cache', './img', 300, 3
 )
 # else:
 #     (USERNAME, PTH_DTA, PTH_CHE, PTH_IMG, TOP, WRAN) = (
@@ -37,7 +37,7 @@ A_TOP = pd.read_csv(path.join(PTH_CHE, fName+'_top.csv'))
 ###############################################################################
 # Numpy array shape -----------------------------------------------------------
 (to, tf) = (min(DTA_CLN['Date']), max(DTA_CLN['Date']))
-daysTotal = (tf-to).days
+daysTotal = (tf-to).days+1
 # artists = sorted(list(DTA_CLN['Artist'].unique()))
 artists = sorted(list(A_TOP['Artist'])) if not SORTED else list(A_TOP['Artist'])
 countsArray = np.zeros([len(artists), daysTotal], dtype=np.int16)
@@ -67,9 +67,8 @@ for (ix, art) in enumerate(artists):
 norm = colors.LogNorm(vmin=1, vmax=50)
 # norm = colors.Normalize(vmin=0, vmax=50) # np.max(countsArray))
 # Iterate through artists -----------------------------------------------------
-r = 10
-yPad = 4
 pad = 1
+artPad = 5
 cYear = to.year
 (fig, ax) = plt.subplots(figsize=(6, 10))
 for (r, art) in enumerate(artists):
@@ -84,32 +83,43 @@ for d in range(len(countsArray[0])):
     (tod, tfd) = (d, 0)
     if (to+timedelta(int(d))).year > cYear:
         plt.hlines(
-            d, -pad, len(artists)+pad, '#ffffff00', 
-            lw=.2, ls='-', zorder=-4
+            d, -pad, len(artists)+pad, '#ffffff44', 
+            lw=.1, ls='--', zorder=-10
         )
         cYear += 1
-        ax.text(
-            -2, (d-tod)/2+tod+365/2, cYear, fontsize=5, 
-            color='w', 
-            horizontalalignment='right',
-            verticalalignment='center',
-            rotation=90
-        )
+        if cYear < tf.year:
+            ax.text(
+                -2, (d-tod)/2+tod+365/2, cYear, fontsize=4.5, 
+                color='#ffffff66', 
+                horizontalalignment='right',
+                verticalalignment='center',
+                rotation=90
+            )
         tod = d
-    # ax.text(
-    #     -2, r*yPad, art, fontsize=1, color='w', 
-    #     horizontalalignment='right',
-    #     verticalalignment='center'
-    # )
+for (ix, a) in enumerate(artists):
+    ax.text(
+        ix, -artPad, a, 
+        fontsize=.1, color='w', 
+        horizontalalignment='center',
+        verticalalignment='top',
+        rotation=90
+    )
+    ax.text(
+        ix, len(countsArray[0])+4*artPad, a, 
+        fontsize=.1, color='w', 
+        horizontalalignment='center',
+        verticalalignment='bottom',
+        rotation=90
+    )
 ax.set_aspect(.5/ax.get_data_ratio())
 ax.set_facecolor('#000000')
-ax.set_xlim(-pad*2, len(artists)+pad)
+ax.set_xlim(-pad*2, len(artists)+2*pad)
 ax.set_ylim(-pad, daysTotal+pad)
 ax.axis('off')
 fName = 'Scatter.png'
 plt.savefig(
     path.join(PTH_IMG, fName),
-    dpi=500, transparent=True, facecolor='#000000', 
+    dpi=1500, transparent=True, facecolor='#000000', 
     bbox_inches='tight'
 )
 plt.close('all')

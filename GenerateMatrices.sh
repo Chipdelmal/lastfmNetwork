@@ -16,11 +16,11 @@ NCL='\033[0m'
 ###############################################################################
 # Run Scripts
 ###############################################################################
-# for top in 25 50 100 150 200 250 300 350 400
-# do
-for (( n=1; n<=$WRAN; n++ ))
+for top in 25 50 100 150 200 250 300 350 400 500 600
 do
-    printf "${RED}* Generating Transitions [${TOPA}:${n}]...${NCL}\n"
-    python Compute_Transitions.py $USRM "$PTHO/data" "$PTHO/cache" $TOPA $n
+    for (( n=1; n<=$WRAN; n++ ))
+    do
+        printf "${RED}* Generating Transitions [${top}:${n}]...${NCL}\n"
+        python Compute_Transitions.py $USRM "$PTHO/data" "$PTHO/cache" $top $n
+    done
 done
-# done

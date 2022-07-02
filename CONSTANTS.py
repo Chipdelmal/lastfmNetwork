@@ -21,7 +21,7 @@ BLUE_CATS = [
     '#9efab9', '#dcddd8'
 ]
 SAT_CATS = [
-    '#3a86ff66', '#ff006e66', '#8338ec66',  '#f15bb566'
+    '#8338ec66', '#ff006e66', '#3a86ff66', '#f15bb566' # '#ccff3355',
 ]
 OTHER = '#101044'
 MAPS = [aux.colorPaletteFromHexList([c, '#ffffff99']) for c in SAT_CATS]
