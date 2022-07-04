@@ -12,7 +12,6 @@ from datetime import datetime, timedelta
 from collections import Counter
 import CONSTANTS as cst
 import auxiliary as aux
-import markov as mkv
 
 #if aux.isnotebook():
 (USERNAME, PTH_DTA, PTH_CHE, PTH_IMG, TOP, WRAN) = (
@@ -41,6 +40,7 @@ daysTotal = (tf-to).days+1
 # artists = sorted(list(DTA_CLN['Artist'].unique()))
 artists = sorted(list(A_TOP['Artist'])) if not SORTED else list(A_TOP['Artist'])
 countsArray = np.zeros([len(artists), daysTotal], dtype=np.int16)
+daysTotals = np.sum(countsArray, axis=0)
 # Daily intervals -------------------------------------------------------------
 dteCpy = DTA_CLN['Date'].copy()
 DTA_CLN['Interval'] = pd.to_datetime(dteCpy, errors='coerce', utc=True)
@@ -64,17 +64,18 @@ for (ix, art) in enumerate(artists):
 ###############################################################################
 # Plot Scatter
 ###############################################################################
-norm = colors.LogNorm(vmin=1, vmax=40)
+norm = colors.LogNorm(vmin=1, vmax=25)
 # norm = colors.Normalize(vmin=0, vmax=50) # np.max(countsArray))
-# Iterate through artists -----------------------------------------------------
-pad = 1
-artPad = 5
-cYear = to.year
-(fig, ax) = plt.subplots(figsize=(19.2/2, 10.8/2), dpi=1500) #plt.subplots(figsize=(6, 10))
+# Plot artists ----------------------------------------------------------------
+(pad, artPad, cYear) = (1, 5, to.year)
+(fig, ax) = plt.subplots(
+    figsize=(19.2/2, 10.8/2), 
+    dpi=1500
+)
 for (r, art) in enumerate(artists):
     clr = cst.MAPS[r%len(cst.MAPS)]
     for day in np.nonzero(countsArray[r])[0]:
-        plt.plot(
+        ax.plot(
             [r-.325, r+.325], [day, day],
             color=clr(norm(countsArray[r][day])),
             lw=.2, zorder=5
@@ -82,60 +83,45 @@ for (r, art) in enumerate(artists):
 for d in range(len(countsArray[0])):
     (tod, tfd) = (d, 0)
     if (to+timedelta(int(d))).year > cYear:
-        plt.hlines(
+        ax.hlines(
             d, -pad*100, -pad, '#ffffffBB', 
             lw=.35, ls='-', zorder=-10
         )
-        plt.hlines(
+        ax.hlines(
             d, len(artists)+pad, len(artists)+100*pad, '#ffffffbb', 
             lw=.35, ls='-', zorder=-10
         )
-        # plt.hlines(
-        #     d, -pad, len(artists)+pad, '#ffffff22', 
-        #     lw=.2, ls='-', zorder=-10
-        # )
-        # ax.axhspan(
-        #     d+5, d+365-5, -pad, len(artists)+pad, 
-        #     fc = '#ffffff11', zorder=-10
-        #     # lw=.2, ls='-', zorder=-10 
-        # )
         cYear += 1
         if cYear < tf.year:
             ax.text(
                 -2, (d-tod)/2+tod+365/2, cYear, fontsize=4.5, 
-                color='#ffffff', 
-                horizontalalignment='right',
-                verticalalignment='center',
-                rotation=90
+                color='#ffffff', rotation=90,
+                horizontalalignment='right', verticalalignment='center'                
             )
             ax.text(
                 len(artists)+2, (d-tod)/2+tod+365/2, cYear, fontsize=4.5, 
-                color='#ffffff', 
-                horizontalalignment='right',
-                verticalalignment='center',
-                rotation=90
+                color='#ffffff', rotation=90,
+                horizontalalignment='right', verticalalignment='center'
             )
         tod = d
 for (ix, a) in enumerate(artists):
     ax.text(
         ix, -artPad, a, 
-        fontsize=1.75, color='w', 
-        horizontalalignment='center',
-        verticalalignment='top',
-        rotation=90
+        fontsize=1.75, color='w', rotation=90,
+        horizontalalignment='center', verticalalignment='top'
+        
     )
     ax.text(
         ix, len(countsArray[0])+4*artPad, a, 
-        fontsize=1.75, color='w', 
-        horizontalalignment='center',
-        verticalalignment='bottom',
-        rotation=90
+        fontsize=1.75, color='w', rotation=90,
+        horizontalalignment='center', verticalalignment='bottom'
     )
 # ax.set_aspect(.25/ax.get_data_ratio())
 ax.set_facecolor('#000000')
 ax.set_xlim(-pad*2, len(artists)+2*pad)
 ax.set_ylim(-pad, daysTotal+pad)
 ax.axis('off')
+# Savefig ---------------------------------------------------------------------
 fName = 'Scatter.png'
 plt.savefig(
     path.join(PTH_IMG, fName), # dpi=1500, 
