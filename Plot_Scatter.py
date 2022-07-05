@@ -14,8 +14,8 @@ import CONSTANTS as cst
 import auxiliary as aux
 
 #if aux.isnotebook():
-(USERNAME, PTH_DTA, PTH_CHE, PTH_IMG, TOP) = (
-    'chipmaligno', './data', './cache', './img', 150
+(USERNAME, PTH_DTA, PTH_CHE, PTH_IMG, TOP, WRAN) = (
+    'chipmaligno', './data', './cache', './img', 200, 3
 )
 # else:
 #     (USERNAME, PTH_DTA, PTH_CHE, PTH_IMG, TOP, WRAN) = (
@@ -28,8 +28,6 @@ import auxiliary as aux
 ###############################################################################
 fName = '{}_{:04}-{:02}'.format(USERNAME, TOP, WRAN)
 DTA_CLN = pd.read_csv(path.join(PTH_DTA, USERNAME+'_fxd.csv'), parse_dates=[3])
-# F_MAT = np.load(path.join(PTH_CHE, fName+'_Fmat.npy'))
-# P_MAT = np.load(path.join(PTH_CHE, fName+'_Pmat.npy'))
 A_TOP = pd.read_csv(path.join(PTH_CHE, fName+'_top.csv'))
 ###############################################################################
 # Process Prerequisites
