@@ -20,6 +20,7 @@ def doGeocode(address):
         return doGeocode(address)
 
 def geocodeEntries(info, geoSize=6):
+    # NEEDS IMPROVEMENT (info.get('area') with city)
     (tmp, p1, p2) = (info, info[1], info[2])
     if p1 is None:
         p1 = ''
@@ -43,7 +44,7 @@ def getArtistInfo(artist, topGenres=3):
         names = [i['name'] for i in arts]
         ix = names.index(artist) if artist in names else -1
         info = arts[ix] if (ix>=0) else arts[0]
-        # Get artist info
+        # Get artist info (NEEDS IMPROVEMENT!!!!)
         (id, name, country, city, genre) = (
                 info.get('id'), info.get('name'), info.get('country'),
                 getArea(info), getTopGenres(info, topGenres=topGenres)
