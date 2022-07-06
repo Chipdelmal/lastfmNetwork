@@ -22,7 +22,8 @@ import auxiliary as aux
 #         argv[1], argv[2], argv[3], argv[4], int(argv[5]), int(argv[6])
 #     ) 
 # Internal Constants ----------------------------------------------------------
-(SELF_LOOP, CSCALE, SORTED) = (False, 'Linear', True)
+(CSCALE, SORTED) = ('Linear', True)
+rotation = 45
 ###############################################################################
 # Read Data
 ###############################################################################
@@ -60,12 +61,11 @@ for (ix, art) in enumerate(artists):
 # Plot Scatter
 ###############################################################################
 norm = colors.LogNorm(vmin=1, vmax=50)
-artFontSize =  np.interp(TOP, (50, 250, 500), (4.5, 1, .5))
+artFontSize =  np.interp(TOP, (50, 250, 500), (4.5, 1.25, .5))
 yearFontSize =  np.interp(TOP, (50, 250, 500), (8, 4.5, 4.5))
 yearLineLen = np.interp(TOP, (50, 250, 500), (1.25, 2, 3))
 artPad = np.interp(TOP, (50, 250, 500), (50, 25, 15))
 pad = np.interp(TOP, (50, 250, 500), (.5, 2.5, 5))
-rotation = 90
 if rotation==90:
     aligns = (
         ('left', 'center'), ('right', 'center'), 
