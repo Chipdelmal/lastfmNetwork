@@ -25,3 +25,7 @@ SAT_CATS = [
 ]
 OTHER = '#101044'
 MAPS = [aux.colorPaletteFromHexList([c, '#ffffff99']) for c in SAT_CATS]
+##############################################################################
+# Priority Lists
+##############################################################################
+COUNTRY_PRIORITY = ['US', 'GB', 'CA', 'AU', 'NZ', 'ES', 'MX']

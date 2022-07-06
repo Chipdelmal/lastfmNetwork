@@ -5,10 +5,7 @@ import numpy as np
 import pandas as pd
 from os import path
 from sys import argv
-import matplotlib.pyplot as plt
 from graph_tool.all import *
-import network as ntw
-import CONSTANTS as cst
 import auxiliary as aux
 import network as ntw
 
@@ -77,7 +74,6 @@ mcmc_equilibrate(
 )
 pmode = PartitionModeState(bs, nested=True, converge=True)
 pv = pmode.get_marginal(g)
-# Get consensus estimate
 bs = pmode.get_max_nested()
 state = state.copy(bs=bs)
 ###############################################################################

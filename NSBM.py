@@ -5,16 +5,13 @@ import numpy as np
 import pandas as pd
 from os import path
 from sys import argv
-import matplotlib.pyplot as plt
 from graph_tool.all import *
-import network as ntw
-import CONSTANTS as cst
 import auxiliary as aux
 import network as ntw
 
 if aux.isnotebook():
     (USERNAME, PTH_CHE, PTH_IMG, TOP, WRAN, TRANS_TYPE) = (
-        'chipmaligno', './cache', './img', 500, 3, 'Frequency'
+        'chipmaligno', './cache', './img', 50, 3, 'Frequency'
     )
 else:
     (USERNAME, PTH_CHE, PTH_IMG, TOP, WRAN, TRANS_TYPE) = (
