@@ -1,5 +1,5 @@
 ##############################################################################
-# Nested Stockastic-Block Model
+# Posterior-Sampled Nested Stockastic-Block Model
 ##############################################################################
 import numpy as np
 import pandas as pd
@@ -14,7 +14,7 @@ import network as ntw
 
 if aux.isnotebook():
     (USERNAME, PTH_CHE, PTH_IMG, TOP, WRAN, TRANS_TYPE) = (
-        'chipmaligno', './cache', './img', 500, 3, 'Frequency'
+        'chipmaligno', './cache', './img', 100, 3, 'Frequency'
     )
 else:
     (USERNAME, PTH_CHE, PTH_IMG, TOP, WRAN, TRANS_TYPE) = (
@@ -48,49 +48,54 @@ weight = g.new_edge_property("double")
 edges = list(g.edges())
 for e in edges:
     weight[e] = mat[int(e.source()), int(e.target())]
-# Vertices names --------------------------------------------------------------
-v_prop = g.new_vertex_property("string")
-for (i, v) in enumerate(g.vertices()):
-    v_prop[v] = artsTop[i]
 ###############################################################################
 # Calculate NSBM
 ###############################################################################
-state = minimize_nested_blockmodel_dl(
-    g, state_args=dict(
+state = NestedBlockState(
+    g, 
+    state_args=dict(
         recs=[weight], 
         rec_types=["real-exponential"]
     )
 )
-mcmc_anneal(
-    state, 
-    beta_range=(1, 30), niter=200, 
-    mcmc_equilibrate_args=dict(force_niter=10),
-    verbose=True
+###############################################################################
+# Sample the Posterior
+###############################################################################
+(dS, nmoves) = (0, 0)
+for i in range(100):
+    ret = state.multiflip_mcmc_sweep(niter=10)
+    dS += ret[0]
+    nmoves += ret[1]
+mcmc_equilibrate(state, wait=1000, mcmc_args=dict(niter=10))
+bs = []
+def collect_partitions(s):
+   global bs
+   bs.append(s.get_bs())
+mcmc_equilibrate(
+    state, force_niter=10000, mcmc_args=dict(niter=10),
+    callback=collect_partitions
 )
+pmode = PartitionModeState(bs, nested=True, converge=True)
+pv = pmode.get_marginal(g)
+# Get consensus estimate
+bs = pmode.get_max_nested()
+state = state.copy(bs=bs)
 ###############################################################################
 # Plot and Export
 ###############################################################################
-# pos = sfdp_layout(g)
+fName = 'PRTC{}_{:03d}-{:02d}.png'
 state.draw(
-    # pos=pos,
-    # vertex_text=v_prop, 
-    # edge_marker_size=e_size,
+    vertex_shape="pie",
+    layout="radial",
     ink_scale=1,
-    vertex_font_size=3,
+    edge_color=weight,
+    edge_pen_width=prop_to_size(weight, .05, 2, power=1, log=False),
     edge_marker_size=0.1,
-    edge_pen_width=prop_to_size(weight, 0.075, 1.5, power=1),
-    bg_color='#000000',
+    vertex_pie_fractions=pv,
     output_size=(2000, 2000),
+    bg_color='#000000',
     output=path.join(
         PTH_IMG, 
         'NSBM_{:04d}-{:02d}_{}.png'.format(TOP, WRAN, TRANS_TYPE[0])
     )
 )
-###############################################################################
-# Inspect Results
-###############################################################################
-# blocks = list(state.get_bs()[0])
-# mylist = list(zip(artsTop, blocks))
-# values = set(map(lambda x:x[1], mylist))
-# clusters = [[y[0] for y in mylist if y[1]==x] for x in values]
-# clusters
