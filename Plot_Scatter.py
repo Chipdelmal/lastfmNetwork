@@ -15,12 +15,12 @@ import auxiliary as aux
 
 #if aux.isnotebook():
 (USERNAME, PTH_DTA, PTH_CHE, PTH_IMG, TOP, WRAN) = (
-    'chipmaligno', './data', './cache', './img', 200, 3
+    'chipmaligno', './data', './cache', './img', 250, 3
 )
 # else:
 #     (USERNAME, PTH_DTA, PTH_CHE, PTH_IMG, TOP, WRAN) = (
 #         argv[1], argv[2], argv[3], argv[4], int(argv[5]), int(argv[6])
-#     )
+#     ) 
 # Internal Constants ----------------------------------------------------------
 (SELF_LOOP, CSCALE, SORTED) = (False, 'Linear', True)
 ###############################################################################
@@ -60,16 +60,26 @@ for (ix, art) in enumerate(artists):
 # Plot Scatter
 ###############################################################################
 norm = colors.LogNorm(vmin=1, vmax=50)
-artFontSize =  np.interp(TOP, (50, 250), (6, 2))
-yearFontSize =  np.interp(TOP, (50, 250), (8, 4.5))
-yearLineLen = np.interp(TOP, (50, 250), (1.25, 2))
-artPad = np.interp(TOP, (50, 250), (50, 25))
-pad = np.interp(TOP, (50, 250), (.5, 2.5))
+artFontSize =  np.interp(TOP, (50, 250, 500), (4.5, 1, .5))
+yearFontSize =  np.interp(TOP, (50, 250, 500), (8, 4.5, 4.5))
+yearLineLen = np.interp(TOP, (50, 250, 500), (1.25, 2, 3))
+artPad = np.interp(TOP, (50, 250, 500), (50, 25, 15))
+pad = np.interp(TOP, (50, 250, 500), (.5, 2.5, 5))
 rotation = 90
+if rotation==90:
+    aligns = (
+        ('left', 'center'), ('right', 'center'), 
+        ('center', 'top'), ('center', 'bottom')
+    )
+else:
+    aligns = (
+        ('right', 'center'), ('left', 'center'), 
+        ('right', 'top'), ('left', 'bottom')
+    )
 # norm = colors.Normalize(vmin=0, vmax=50) # np.max(countsArray))
 # Plot artists ----------------------------------------------------------------
 cYear = to.year
-(fig, ax) = plt.subplots(figsize=(24/2, 10.8/2), dpi=1500)
+(fig, ax) = plt.subplots(figsize=(19.2/2, 10.8/2), dpi=1500)
 # Counts Lines ----------------------------------------------------------------
 for (r, art) in enumerate(artists):
     clr = cst.MAPS[r%len(cst.MAPS)]
@@ -98,12 +108,12 @@ for d in range(len(countsArray[0])):
             ax.text(
                 -pad-1, (d-tod)/2+tod+365/2, cYear, 
                 fontsize=yearFontSize, color='#ffffff', rotation=rotation,
-                horizontalalignment='left', verticalalignment='center'                
+                ha=aligns[0][0], va=aligns[0][1]             
             )
             ax.text(
                 len(artists)+pad, (d-tod)/2+tod+365/2, cYear, 
                 fontsize=yearFontSize, color='#ffffff', rotation=rotation,
-                horizontalalignment='right', verticalalignment='center'
+                ha=aligns[1][0], va=aligns[1][1]   
             )
         tod = d
 # Artists Labels --------------------------------------------------------------
@@ -111,13 +121,13 @@ for (ix, a) in enumerate(artists):
     ax.text(
         ix, -artPad, a, 
         fontsize=artFontSize, color='w', rotation=rotation,
-        horizontalalignment='center', verticalalignment='top'
+        ha=aligns[2][0], va=aligns[2][1]
         
     )
     ax.text(
         ix, len(countsArray[0])+artPad, a, 
         fontsize=artFontSize, color='w', rotation=rotation,
-        horizontalalignment='center', verticalalignment='bottom'
+        ha=aligns[3][0], va=aligns[3][1]
     )
 # Axes and Style --------------------------------------------------------------
 # ax.set_aspect(.25/ax.get_data_ratio())
