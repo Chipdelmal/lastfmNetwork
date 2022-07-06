@@ -11,7 +11,7 @@ import network as ntw
 
 if aux.isnotebook():
     (USERNAME, PTH_CHE, PTH_IMG, TOP, WRAN, TRANS_TYPE) = (
-        'chipmaligno', './cache', './img', 50, 3, 'Frequency'
+        'chipmaligno', './cache', './img', 100, 3, 'Frequency'
     )
 else:
     (USERNAME, PTH_CHE, PTH_IMG, TOP, WRAN, TRANS_TYPE) = (
@@ -62,7 +62,7 @@ mcmc_anneal(
     state, 
     beta_range=(1, 30), niter=200, 
     mcmc_equilibrate_args=dict(force_niter=10),
-    verbose=True
+    verbose=False
 )
 ###############################################################################
 # Plot and Export

@@ -11,7 +11,7 @@ import network as ntw
 
 if aux.isnotebook():
     (USERNAME, PTH_CHE, PTH_IMG, TOP, WRAN, TRANS_TYPE) = (
-        'chipmaligno', './cache', './img', 100, 3, 'Frequency'
+        'chipmaligno', './cache', './img', 500, 3, 'Probability'
     )
 else:
     (USERNAME, PTH_CHE, PTH_IMG, TOP, WRAN, TRANS_TYPE) = (
@@ -60,7 +60,7 @@ state = NestedBlockState(
 ###############################################################################
 (dS, nmoves) = (0, 0)
 for i in range(100):
-    ret = state.multiflip_mcmc_sweep(niter=10)
+    ret = state.multiflip_mcmc_sweep(niter=10, verbose=False)
     dS += ret[0]
     nmoves += ret[1]
 mcmc_equilibrate(state, wait=1000, mcmc_args=dict(niter=10))
@@ -70,7 +70,7 @@ def collect_partitions(s):
    bs.append(s.get_bs())
 mcmc_equilibrate(
     state, force_niter=10000, mcmc_args=dict(niter=10),
-    callback=collect_partitions
+    callback=collect_partitions, verbose=False
 )
 pmode = PartitionModeState(bs, nested=True, converge=True)
 pv = pmode.get_marginal(g)
@@ -79,7 +79,6 @@ state = state.copy(bs=bs)
 ###############################################################################
 # Plot and Export
 ###############################################################################
-fName = 'PRTC{}_{:03d}-{:02d}.png'
 state.draw(
     vertex_shape="pie",
     layout="radial",
@@ -92,6 +91,6 @@ state.draw(
     bg_color='#000000',
     output=path.join(
         PTH_IMG, 
-        'NSBM_{:04d}-{:02d}_{}.png'.format(TOP, WRAN, TRANS_TYPE[0])
+        'PNSBM_{:04d}-{:02d}_{}.png'.format(TOP, WRAN, TRANS_TYPE[0])
     )
 )
