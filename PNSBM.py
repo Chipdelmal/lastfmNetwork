@@ -11,7 +11,7 @@ import network as ntw
 
 if aux.isnotebook():
     (USERNAME, PTH_CHE, PTH_IMG, TOP, WRAN, TRANS_TYPE) = (
-        'chipmaligno', './cache', './img', 500, 3, 'Probability'
+        'chipmaligno', './cache', './img', 600, 3, 'Probability'
     )
 else:
     (USERNAME, PTH_CHE, PTH_IMG, TOP, WRAN, TRANS_TYPE) = (
