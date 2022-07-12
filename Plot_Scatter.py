@@ -15,7 +15,7 @@ import auxiliary as aux
 
 #if aux.isnotebook():
 (USERNAME, PTH_DTA, PTH_CHE, PTH_IMG, TOP, WRAN) = (
-    'chipmaligno', './data', './cache', './img', 150, 3
+    'chipmaligno', './data', './cache', './img', 100, 3
 )
 # else:
 #     (USERNAME, PTH_DTA, PTH_CHE, PTH_IMG, TOP, WRAN) = (
@@ -61,7 +61,7 @@ for (ix, art) in enumerate(artists):
 # Plot Scatter
 ###############################################################################
 norm = colors.LogNorm(vmin=1, vmax=50)
-artFontSize =  np.interp(TOP, (50, 100, 250, 500), (3, 3, 1, .5))
+artFontSize =  np.interp(TOP, (50, 100, 250, 500, 600), (3, 3, 1, .25, .025))
 yearFontSize =  np.interp(TOP, (50, 250, 500), (8, 4.5, 4.5))
 yearLineLen = np.interp(TOP, (50, 250, 500), (1.25, 2, 3))
 artPad = np.interp(TOP, (50, 250, 500), (50, 25, 15))

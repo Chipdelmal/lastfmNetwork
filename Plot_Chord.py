@@ -17,7 +17,7 @@ import auxiliary as aux
 
 if aux.isnotebook():
     (USERNAME, PTH_CHE, PTH_IMG, TOP, WRAN, TRANS_TYPE) = (
-        'chipmaligno', './cache', './img', 100, 5, 'Frequency'
+        'chipmaligno', './cache', './img', 100, 3, 'Frequency'
     )
 else:
     (USERNAME, PTH_CHE, PTH_IMG, TOP, WRAN, TRANS_TYPE) = (
@@ -42,7 +42,7 @@ if CSCALE == 'Log':
 else:
     norm = colors.Normalize(vmin=np.min(selfProb), vmax=np.max(selfProb))
 # Colors list -----------------------------------------------------------------
-colorPalette = aux.colorPaletteFromHexList(cst.C_NBLUE_LBLUE)
+colorPalette = aux.colorPaletteFromHexList(cst.C_NBLUE_WHITE)
 pColors = [colorPalette(norm(i)) for i in selfProb]
 ###############################################################################
 # Patch Matrix
@@ -67,8 +67,8 @@ ax = chd.chord_modded(
     cMat, 
     names=artsTop[:TOP], 
     rotate_names=[True]*TOP,
-    alpha=.65, pad=.5, gap=0.05, fontsize=fontSize,
-    fontcolor='k', chordwidth=.7, width=0.1, 
+    alpha=.8, pad=.5, gap=0.05, fontsize=fontSize,
+    fontcolor='w', chordwidth=.7, width=0.1, 
     extent=360, start_at=0,
     colors=pColors, use_gradient=True
 )
@@ -78,7 +78,7 @@ ax.axis('off')
 fName = 'Chord_{:04d}-{:02d}_{}.png'.format(TOP, WRAN, TRANS_TYPE[0])
 plt.savefig(
     path.join(PTH_IMG, fName),
-    dpi=1000, transparent=True, facecolor='w', 
+    dpi=1000, transparent=True, facecolor='k', 
     bbox_inches='tight'
 )
 plt.close('all')
