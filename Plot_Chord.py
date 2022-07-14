@@ -67,7 +67,7 @@ ax = chd.chord_modded(
     cMat, 
     names=artsTop[:TOP], 
     rotate_names=[True]*TOP,
-    alpha=.8, pad=.5, gap=0.05, fontsize=fontSize,
+    alpha=.75, pad=.5, gap=0.05, fontsize=fontSize,
     fontcolor='w', chordwidth=.7, width=0.1, 
     extent=360, start_at=0,
     colors=pColors, use_gradient=True

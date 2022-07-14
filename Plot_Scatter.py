@@ -13,14 +13,14 @@ from collections import Counter
 import CONSTANTS as cst
 import auxiliary as aux
 
-#if aux.isnotebook():
-(USERNAME, PTH_DTA, PTH_CHE, PTH_IMG, TOP, WRAN) = (
-    'chipmaligno', './data', './cache', './img', 100, 3
-)
-# else:
-#     (USERNAME, PTH_DTA, PTH_CHE, PTH_IMG, TOP, WRAN) = (
-#         argv[1], argv[2], argv[3], argv[4], int(argv[5]), int(argv[6])
-#     ) 
+if aux.isnotebook():
+    (USERNAME, PTH_DTA, PTH_CHE, PTH_IMG, TOP, WRAN) = (
+        'chipmaligno', './data', './cache', './img', 150, 3
+    )
+else:
+    (USERNAME, PTH_DTA, PTH_CHE, PTH_IMG, TOP, WRAN) = (
+        argv[1], argv[2], argv[3], argv[4], int(argv[5]), int(argv[6])
+    ) 
 # Internal Constants ----------------------------------------------------------
 (CSCALE, SORTED) = ('Linear', True)
 rotation = 45

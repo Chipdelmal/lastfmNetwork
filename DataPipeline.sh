@@ -6,9 +6,35 @@
 USRM=$1
 PTHO=$2
 WRAN=$3
-
+###############################################################################
+# Terminal Colors
+###############################################################################
+RED='\033[0;31m'
+NCL='\033[0m'
+###############################################################################
+# Generate Datasets and Matrices
+###############################################################################
 bash GenerateDatasets.sh $USRM $PTHO
 for top in 25 50 75 100 125 150 200 250 300 350 400 500 600
 do
     bash GenerateMatrices.sh $USRM $PTHO $top $WRAN
+done
+###############################################################################
+# Strip Plots
+###############################################################################
+for top in 75 100 150 200 250 300 400 500 600
+do
+    printf "${RED}* Scatter Plots [${top}]...${NCL}\n"
+    python Plot_Scatter.py $USRM "$PTHO/data" "$PTHO/cache" "$PTHO/img" $top $WRAN
+done
+###############################################################################
+# Chord Plots
+###############################################################################
+for (( wran=1;wran<=$WRAN;wran++ ))
+do
+    for top in 100 125 150 200 250 300
+    do
+        printf "${RED}* Chord Plots [${top}:$wran]...${NCL}\n"
+        python Plot_Chord.py $USRM "$PTHO/cache" "$PTHO/img" $top $wran 'Frequency'
+    done
 done
