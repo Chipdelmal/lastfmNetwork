@@ -1,11 +1,20 @@
 #!/bin/bash
 ###############################################################################
 # Data Pipeline
-#   
+#   USRM: Last.fm dataset username
+#   PTHO: Path out
+#   WRAN: Window range size (upper limit)
+#   DTAP: Data process ("dp" or empty for true, anything else for false)
+#   SPLT: Strip plot export ("sp" or empty for true, anything else for false)
+#   CPLT: Chords plot ("cp" or empty for true, anything else for false)
 ###############################################################################
 USRM=$1
 PTHO=$2
-WRAN=$3
+WRAN=${3:-3}
+# Optional arguments ----------------------------------------------------------
+DTAP=${4:-'dp'}
+SPLT=${5:-'sp'}
+CPLT=${6:-'cp'}
 ###############################################################################
 # Terminal Colors
 ###############################################################################
@@ -14,27 +23,33 @@ NCL='\033[0m'
 ###############################################################################
 # Generate Datasets and Matrices
 ###############################################################################
-bash GenerateDatasets.sh $USRM $PTHO
-for top in 25 50 75 100 125 150 200 250 300 350 400 500 600
-do
-    bash GenerateMatrices.sh $USRM $PTHO $top $WRAN
-done
+if [ "$DTAP" = "dp" ]; then
+    bash GenerateDatasets.sh $USRM $PTHO
+    for top in 50 75 100 150 200 250 300 400 500 600
+    do
+        bash GenerateMatrices.sh $USRM $PTHO $top $WRAN
+    done
+fi
 ###############################################################################
 # Strip Plots
 ###############################################################################
-for top in 75 100 150 200 250 300 400 500 600
-do
-    printf "${RED}* Scatter Plots [${top}]...${NCL}\n"
-    python Plot_Scatter.py $USRM "$PTHO/data" "$PTHO/cache" "$PTHO/img" $top $WRAN
-done
+if [ "$SPLT" = "sp" ]; then
+    for top in 100 150 200 250 300 400 500 600
+    do
+        printf "${RED}* Scatter Plots [${top}]...${NCL}\n"
+        python Plot_Scatter.py $USRM "$PTHO/data" "$PTHO/cache" "$PTHO/img" $top $WRAN
+    done
+fi
 ###############################################################################
 # Chord Plots
 ###############################################################################
-for (( wran=1;wran<=$WRAN;wran++ ))
-do
-    for top in 100 125 150 200 250 300
+if [ "$CPLT" = "cp" ]; then
+    for top in 50 100 150 200 250 350
     do
-        printf "${RED}* Chord Plots [${top}:$wran]...${NCL}\n"
-        python Plot_Chord.py $USRM "$PTHO/cache" "$PTHO/img" $top $wran 'Frequency'
+        for (( wran=1;wran<=$WRAN;wran++ ))
+        do
+            printf "${RED}* Chord Plots [${top}:$wran]...${NCL}\n"
+            python Plot_Chord.py $USRM "$PTHO/cache" "$PTHO/img" $top $wran 'Frequency'
+        done
     done
-done
+fi

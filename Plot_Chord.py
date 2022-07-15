@@ -52,7 +52,7 @@ if TRANS_TYPE=='Frequency':
     cMat = F_MAT.copy()
     np.fill_diagonal(cMat, 0)
     fontSize = np.interp(
-        TOP, (25, 100, 150, 300, 350), (3, 1.75, 1.25, .65, .45)
+        TOP, (50, 100, 150, 300, 350), (3.25, 1.5, 1.25, .65, .45)
     )
 else:
     cMat = P_MAT.copy()
@@ -78,7 +78,7 @@ ax.axis('off')
 fName = 'Chord_{:04d}-{:02d}_{}.png'.format(TOP, WRAN, TRANS_TYPE[0])
 plt.savefig(
     path.join(PTH_IMG, fName),
-    dpi=1000, transparent=True, facecolor='k', 
+    dpi=1500, transparent=True, facecolor='k', 
     bbox_inches='tight'
 )
 plt.close('all')
