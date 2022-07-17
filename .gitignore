@@ -1,3 +1,8 @@
+# Fonts
+*.ttf
+*.TTF
+*.otf
+
 # Output Folders and Files
 # img/
 # data/
@@ -6,6 +11,7 @@
 *.csv
 *.txt
 *.npy
+*.gif
 
 # Personal Files
 KEYS.py

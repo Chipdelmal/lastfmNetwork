@@ -27,6 +27,7 @@ def calcTransitionsMatrix(
         if verbose:
             txt = f'* Processing: {ix}/{playNum-window}'
             print(colored(txt, 'blue'), end='\r')
+        print(colored(' '*100, 'blue'), end='\r')
     return tMat
  
 def calcWeightedTransitionsMatrix(

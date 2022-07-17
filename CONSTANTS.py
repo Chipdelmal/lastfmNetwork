@@ -26,6 +26,13 @@ SAT_CATS = [
 ]
 OTHER = '#101044'
 MAPS = [aux.colorPaletteFromHexList([c, '#ffffff99']) for c in SAT_CATS]
+WORDCLOUD_COLORS = [
+    '#ffffff', '#ffffff', '#ffffff', '#0466c8', 
+    '#ffffff', '#ffffff', '#ffffff', '#ff0a54',
+    '#ffffff', '#ffffff', '#ffffff', '#8338ec', 
+    '#ffffff', '#ffffff', '#ffffff'
+]
+WORDCLOUD_MAP = aux.colorPaletteFromHexList(WORDCLOUD_COLORS)
 ##############################################################################
 # Priority Lists
 ##############################################################################
