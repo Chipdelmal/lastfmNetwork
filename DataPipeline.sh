@@ -27,13 +27,13 @@ RED='\033[0;31m'; NCL='\033[0m'
 ###############################################################################
 # Generate Datasets and Matrices
 ###############################################################################
-# if [ "$DTAP" = "-dp" ]; then
-#     bash GenerateDatasets.sh $USRM $PTHO
-#     for top in 50 75 100 150 200 250 300 400 500 600
-#     do
-#         bash GenerateMatrices.sh $USRM $PTHO $top $WHI
-#     done
-# fi
+if [ "$DTAP" = "-dp" ]; then
+    bash GenerateDatasets.sh $USRM $PTHO
+    for top in 50 75 100 150 200 250 300 400 500 600
+    do
+        bash GenerateMatrices.sh $USRM $PTHO $top $WHI
+    done
+fi
 ###############################################################################
 # Wordclouds
 ###############################################################################
@@ -48,23 +48,23 @@ fi
 ###############################################################################
 # Strip Plots
 ###############################################################################
-# if [ "$SPLT" = "-sp" ]; then
-#     for top in 100 150 200 250 300 400 500 600
-#     do
-#         printf "${RED}* Strip Plots [${top}]...${NCL}\n"
-#         python Plot_Scatter.py $USRM "$PTHO/data" "$PTHO/cache" "$PTHO/img" $top $WHI
-#     done
-# fi
-# ###############################################################################
-# # Chord Plots
-# ###############################################################################
-# if [ "$CPLT" = "-cp" ]; then
-#     for top in 50 100 150 200 250
-#     do
-#         for (( wran=$WLO;wran<=$WHI;wran++ ))
-#         do
-#             printf "${RED}* Chord Plots [${top}:$wran]...${NCL}\n"
-#             python Plot_Chord.py $USRM "$PTHO/cache" "$PTHO/img" $top $wran 'Frequency'
-#         done
-#     done
-# fi
+if [ "$SPLT" = "-sp" ]; then
+    for top in 100 150 200 250 300 400 500 600
+    do
+        printf "${RED}* Strip Plots [${top}]...${NCL}\n"
+        python Plot_Scatter.py $USRM "$PTHO/data" "$PTHO/cache" "$PTHO/img" $top $WHI
+    done
+fi
+###############################################################################
+# Chord Plots
+###############################################################################
+if [ "$CPLT" = "-cp" ]; then
+    for top in 50 100 150 200 250
+    do
+        for (( wran=$WLO;wran<=$WHI;wran++ ))
+        do
+            printf "${RED}* Chord Plots [${top}:$wran]...${NCL}\n"
+            python Plot_Chord.py $USRM "$PTHO/cache" "$PTHO/img" $top $wran 'Frequency'
+        done
+    done
+fi
