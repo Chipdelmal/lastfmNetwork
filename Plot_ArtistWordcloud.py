@@ -14,7 +14,7 @@ import auxiliary as aux
 
 if aux.isnotebook():
     (USERNAME, PTH_DTA, PTH_IMG, PTH_FNT, YLO, YHI) = (
-        'chipmaligno', './data', './img', './fonts', 2021, 2022
+        'chipmaligno', './data', './img', './fonts', 2022, 2023
     )
 else:
     (USERNAME, PTH_DTA, PTH_IMG, PTH_FNT, YLO, YHI) = (
@@ -39,8 +39,8 @@ data = DTA_CLN.loc[msk]
 ###############################################################################
 # Setup Structures
 ###############################################################################
-artists = sorted(DTA_CLN.get('Artist').unique())
-artistCount = DTA_CLN.groupby('Artist').size().sort_values(ascending=False)
+artists = sorted(data.get('Artist').unique())
+artistCount = data.groupby('Artist').size().sort_values(ascending=False)
 if DATE_PRINT:
     artistCount = artistCount.append(
         pd.Series([10*max(artistCount.values)], index=[str(yLo[0])])
@@ -73,3 +73,4 @@ plt.savefig(
     transparent=False, bbox_inches='tight', pad_inches=0.0,
     metadata=None
 )
+plt.close('all')
