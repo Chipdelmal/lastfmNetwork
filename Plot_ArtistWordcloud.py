@@ -14,7 +14,7 @@ import auxiliary as aux
 
 if aux.isnotebook():
     (USERNAME, PTH_DTA, PTH_IMG, PTH_FNT, YLO, YHI) = (
-        'chipmaligno', './data', './img', './fonts', 2022, 2023
+        'chipmaligno', './data', './img', './fonts', 2013, 2014
     )
 else:
     (USERNAME, PTH_DTA, PTH_IMG, PTH_FNT, YLO, YHI) = (
@@ -32,7 +32,7 @@ DTA_CLN = pd.read_csv(path.join(PTH_DTA, USERNAME+'_fxd.csv'), parse_dates=[3])
 msk = [
     (
         (i.date() >= date(yLo[0], yLo[1], 1)) and 
-        (i.date() < date(yHi[0], yHi[1], 1))
+        (i.date() <  date(yHi[0], yHi[1], 1))
     ) for i in DTA_CLN['Date']
 ]
 data = DTA_CLN.loc[msk]
