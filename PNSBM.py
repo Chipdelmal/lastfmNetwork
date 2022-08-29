@@ -87,7 +87,7 @@ state.draw(
     edge_pen_width=prop_to_size(weight, .05, 2, power=1, log=False),
     edge_marker_size=0.1,
     vertex_pie_fractions=pv,
-    output_size=(2000, 2000),
+    output_size=(5000, 5000),
     bg_color='#000000',
     output=path.join(
         PTH_IMG, 

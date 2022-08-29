@@ -68,3 +68,16 @@ if [ "$CPLT" = "-cp" ]; then
         done
     done
 fi
+###############################################################################
+# NSBM Plots
+###############################################################################
+if [ "$CPLT" = "-cp" ]; then
+    for top in 100 200 300 400 500 600
+    do
+        for (( wran=$WLO;wran<=$WHI;wran++ ))
+        do
+            printf "${RED}* NSBM Plots [${top}:$wran]...${NCL}\n"
+            python NSBM.py $USRM "$PTHO/cache" "$PTHO/img" $top $wran 'Frequency'
+        done
+    done
+fi

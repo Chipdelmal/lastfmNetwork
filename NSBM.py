@@ -77,7 +77,7 @@ state.draw(
     edge_marker_size=0.1,
     edge_pen_width=prop_to_size(weight, 0.075, 1.5, power=1),
     bg_color='#000000',
-    output_size=(2000, 2000),
+    output_size=(5000, 5000),
     output=path.join(
         PTH_IMG, 
         'NSBM_{:04d}-{:02d}_{}.png'.format(TOP, WRAN, TRANS_TYPE[0])
