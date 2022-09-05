@@ -22,7 +22,7 @@ else:
     (USERNAME, PTH_DTA, PTH_CHE, PTH_IMG, TOP, WRAN) = (
         argv[1], argv[2], argv[3], argv[4], int(argv[5]), int(argv[6])
     ) 
-WIN_SIZE = 8
+WIN_SIZE = 15
 # Internal Constants ----------------------------------------------------------
 (CSCALE, SORTED) = ('Linear', True)
 rotation = 45
@@ -49,3 +49,24 @@ DTA_CLN['Interval'] = DTA_CLN['Interval'].dt.tz_localize(None).dt.to_period('D')
 ###############################################################################
 # Fill Array
 ###############################################################################
+(tInit, tEnd) = (min(DTA_CLN['Interval']), max(DTA_CLN['Interval']))
+(twInit, diversity) = (tInit, [])
+for tx in range((tEnd-tInit).delta.days-WIN_SIZE-1):
+    twEnd = twInit + timedelta(days=WIN_SIZE)
+    # Generate filter
+    dteFltr = (
+        list(DTA_CLN['Interval'] >= twInit),
+        list(DTA_CLN['Interval'] < twEnd)
+    )
+    fltr = [all(i) for i in zip(*dteFltr)]
+    # Get entries
+    windowPlays = DTA_CLN[fltr]
+    artCount = len(windowPlays['Artist'].unique())
+    # Update variables
+    diversity.append(artCount)
+    twInit += 1
+###############################################################################
+# Plot
+###############################################################################
+fig, ax = plt.subplots()
+ax.plot(diversity)
