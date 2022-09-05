@@ -4,6 +4,7 @@
 ###############################################################################
 import os
 import warnings
+import numpy as np
 import matplotlib.colors as mcolors
 warnings.filterwarnings("ignore")
 
@@ -50,3 +51,5 @@ def colorPaletteFromHexList(clist):
     rvb = mcolors.LinearSegmentedColormap.from_list("", clrs)
     return rvb
 
+def rollingAverage(x, w):
+    return np.convolve(x, np.ones(w), 'valid') / w
