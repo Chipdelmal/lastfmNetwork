@@ -16,13 +16,13 @@ import auxiliary as aux
 
 if aux.isnotebook():
     (USERNAME, PTH_DTA, PTH_CHE, PTH_IMG, TOP, WRAN) = (
-        'chipmaligno', './data', './cache', './img', 100, 3
+        'chipmaligno', './data', './cache', './img', 600, 3
     )
 else:
     (USERNAME, PTH_DTA, PTH_CHE, PTH_IMG, TOP, WRAN) = (
         argv[1], argv[2], argv[3], argv[4], int(argv[5]), int(argv[6])
     ) 
-WIN_SIZE = 8
+WIN_SIZE = 30
 # Internal Constants ----------------------------------------------------------
 (CSCALE, SORTED) = ('Linear', True)
 rotation = 45
@@ -64,7 +64,7 @@ for tx in range(entries):
     windowPlays = DTA_CLN[fltr]
     artCount = len(windowPlays['Artist'].unique())
     # Update variables
-    diversity[tx] = artCount
+    diversity[tx] = artCount / WIN_SIZE
     twInit += 1
 diversityRolling = aux.rollingAverage(diversity, int(WIN_SIZE*4))
 ###############################################################################
