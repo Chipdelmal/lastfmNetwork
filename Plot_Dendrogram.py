@@ -15,7 +15,7 @@ import auxiliary as aux
 
 if aux.isnotebook():
     (USERNAME, PTH_CHE, PTH_IMG, TOP, WRAN, TRANS_TYPE) = (
-        'chipmaligno', './cache', './img', 100, 3, 'Frequency'
+        'chipmaligno', './cache', './img', 150, 3, 'Frequency'
     )
 else:
     (USERNAME, PTH_CHE, PTH_IMG, TOP, WRAN, TRANS_TYPE) = (
@@ -49,13 +49,14 @@ linkage_matrix = linkage(dists, "single")
 # Dendrogram
 ###############################################################################
 fName = 'Dendrogram_{:04d}-{:02d}_{}.png'.format(TOP, WRAN, TRANS_TYPE[0])
-with plt.rc_context({'lines.linewidth': 0.5}):
+set_link_color_palette(['#ff006e88']*10)
+with plt.rc_context({'lines.linewidth': 0.4}):
     (fig, ax) = plt.subplots()
     dend = dendrogram(
         linkage_matrix, 
         orientation='right',
         labels=list(A_TOP['Artist']),
-        above_threshold_color='#bcbddcA0', 
+        above_threshold_color='#ff006e88', 
         count_sort='descending',
         distance_sort=True
     )
@@ -65,10 +66,10 @@ with plt.rc_context({'lines.linewidth': 0.5}):
     ax.spines['right'].set_visible(False)
     ax.spines['bottom'].set_visible(False)
     ax.spines['left'].set_visible(False)
-    ax.tick_params(axis='y', which='major', labelsize=2)
+    ax.tick_params(axis='y', which='major', labelsize=.5, colors='#ffffff')
     plt.savefig(
         path.join(PTH_IMG, fName),
-        dpi=1500, transparent=True, facecolor='w', 
+        dpi=1500, transparent=True, facecolor='k', 
         bbox_inches='tight'
     )
     plt.close('all')
