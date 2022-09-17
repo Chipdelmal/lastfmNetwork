@@ -119,3 +119,6 @@ python Compute_Transitions.py 'chipmaligno' './data' './cache' 100 5
 * `CONSTANTS.py`: General constants common for all the scripts.
 * `BANS.py`: Dictionaries and sets that contain bans and fixes for artists' names.
 * `KEYS.py`: Musicbrainz app keys and login information.
+
+
+![](https://chipdelmal.github.io/media/chord/ChordC_100-05.png)
