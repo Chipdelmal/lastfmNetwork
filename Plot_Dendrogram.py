@@ -15,7 +15,7 @@ import auxiliary as aux
 
 if aux.isnotebook():
     (USERNAME, PTH_CHE, PTH_IMG, TOP, WRAN, TRANS_TYPE) = (
-        'chipmaligno', './cache', './img', 150, 3, 'Frequency'
+        'chipmaligno', './cache', './img', 200, 3, 'Frequency'
     )
 else:
     (USERNAME, PTH_CHE, PTH_IMG, TOP, WRAN, TRANS_TYPE) = (
