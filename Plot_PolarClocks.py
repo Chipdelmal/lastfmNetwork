@@ -27,7 +27,7 @@ YEAR_ONLY = 'True'
 ##############################################################################
 (WIDTH, HEIGHT, RESOLUTION) = (3840, 2160, 500)
 (HOURS_OFFSET, N) = (6, 24)
-(MAX_RANGE, AUTO_RANGE) = (3.6e3, False)
+(MAX_RANGE, AUTO_RANGE) = (3.6e3, True)
 ###############################################################################
 # Read Data
 ###############################################################################
@@ -48,6 +48,7 @@ hoursFreq = [hoursPlays.count(hD) for hD in list(range(23, -1, -1))]
 #############################################################################
 # Polar
 #############################################################################
+rScale = 'linear'
 barSwatch = ['#bbdefb', '#64b5f6', '#2196f3', '#1976d2', '#0d47a1', '#001d5d']
 (minFreq, maxFreq) = (min(hoursFreq), max(hoursFreq))
 fig = figure(figsize=(8, 8), dpi=RESOLUTION)
@@ -90,16 +91,17 @@ ax.text(
     horizontalalignment='center',
     verticalalignment='center',
     fontsize=60, color='#000000DD',
-    transform=ax.transAxes, zorder=15
+    transform=ax.transAxes, zorder=50
 )
 ax.text(
     0.5, 0.68, 'playcount: {}'.format(sum(hoursFreq)),
     horizontalalignment='center',
     verticalalignment='center',
     fontsize=20, color='#000000DD',
-    transform=ax.transAxes, zorder=15
+    transform=ax.transAxes, zorder=50
 )
 fig.patch.set_facecolor('#ffffff')
+ax.set_rscale(rScale)
 ax.set_ylim(0, yTop)
 ax.set_yticks(np.arange(0, maxFreq, maxFreq*.25))
 ax.set_yticklabels([])
