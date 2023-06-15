@@ -15,7 +15,7 @@ import auxiliary as aux
 
 if aux.isnotebook():
     (USERNAME, PTH_DTA, PTH_IMG, PTH_FNT, YLO, YHI) = (
-        'chipmaligno', './data', './img', './fonts', 2019, 2020
+        'chipmaligno', './data', './img', './fonts', 2023, 2024
     )
 else:
     (USERNAME, PTH_DTA, PTH_IMG, PTH_FNT, YLO, YHI) = (
