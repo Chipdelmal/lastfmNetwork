@@ -106,22 +106,29 @@ def parseFromMusicbrainz(
             mbFile, quoting=csv.QUOTE_MINIMAL
         )
         header = generateMBHeader(topGenres, geoSize)
+        print(header)
         mbWriter.writerow(header)
         with open(FILE_PATH + '_dbg.txt', 'w') as out:
             for (i, art) in enumerate(artists):
                 # Parse musicbranz database
                 info = getArtistInfo(art, topGenres=topGenres)
-                info = geocodeEntries(info)
-                # print(info)
-                mbWriter.writerow(info)
-                if verbose:
-                    txt = '* {}/{}: {} [{} - {}]'.format(
-                        str(i+1).zfill(3), str(artNum).zfill(3), 
-                        art, info[0], info[1]
-                    )
-                    sys.stdout.write("\033[K") 
-                    print(colored(txt, 'blue'), end='\r')
-                out.write(txt+'\n')
+                try:
+                    info = geocodeEntries(info)
+                    mbWriter.writerow(info)
+                    if verbose:
+                        txt = '* {}/{}: {} [{} - {}]'.format(
+                            str(i+1).zfill(3), str(artNum).zfill(3), 
+                            art, info[0], info[1]
+                        )
+                        sys.stdout.write("\033[K") 
+                        print(colored(txt, 'blue'), end='\r')
+                    out.write(txt+'\n')
+                except:
+                    if verbose:
+                        txt = f'* Error with {info}' 
+                        sys.stdout.write("\033[K") 
+                        print(colored(txt, 'red'), end='\n')
+                    out.write(txt+'\n') 
         if verbose:
             sys.stdout.write("\033[K") 
             print("", end='\r')
