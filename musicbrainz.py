@@ -106,7 +106,6 @@ def parseFromMusicbrainz(
             mbFile, quoting=csv.QUOTE_MINIMAL
         )
         header = generateMBHeader(topGenres, geoSize)
-        print(header)
         mbWriter.writerow(header)
         with open(FILE_PATH + '_dbg.txt', 'w') as out:
             for (i, art) in enumerate(artists):
@@ -116,7 +115,7 @@ def parseFromMusicbrainz(
                     info = geocodeEntries(info)
                     mbWriter.writerow(info)
                     if verbose:
-                        txt = '* {}/{}: {} [{} - {}]'.format(
+                        txt = '\t* {}/{}: {} [{} - {}]'.format(
                             str(i+1).zfill(3), str(artNum).zfill(3), 
                             art, info[0], info[1]
                         )
@@ -125,7 +124,7 @@ def parseFromMusicbrainz(
                     out.write(txt+'\n')
                 except:
                     if verbose:
-                        txt = f'* Error with {info}' 
+                        txt = f'\t* Error in {info}' 
                         sys.stdout.write("\033[K") 
                         print(colored(txt, 'red'), end='\n')
                     out.write(txt+'\n') 
