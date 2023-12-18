@@ -15,7 +15,7 @@ import auxiliary as aux
 
 if aux.isnotebook():
     (USERNAME, PTH_DTA, PTH_CHE, PTH_IMG, TOP, WRAN) = (
-        'chipmaligno', './data', './cache', './img', 150, 3
+        'chipmaligno', './data', './cache', './img', 100, 3
     )
 else:
     (USERNAME, PTH_DTA, PTH_CHE, PTH_IMG, TOP, WRAN) = (
@@ -23,7 +23,7 @@ else:
     ) 
 # Internal Constants ----------------------------------------------------------
 (CSCALE, SORTED) = ('Linear', True)
-rotation = 90
+rotation = 45
 ###############################################################################
 # Read Data
 ###############################################################################
