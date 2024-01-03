@@ -20,7 +20,7 @@ else:
     (USERNAME, PTH_DTA, PTH_IMG, PTH_FNT, YLO, YHI) = (
         argv[1],  argv[2], argv[3], argv[4], int(argv[5]), int(argv[6])
     )
-(WIDTH, HEIGHT, RESOLUTION, DATE_PRINT) = (int(1920/2), int(1920/2), 500, True)
+(WIDTH, HEIGHT, RESOLUTION, DATE_PRINT) = (int(1920/2), int(1920/2), 350, True)
 ###############################################################################
 # Read Data
 ###############################################################################
