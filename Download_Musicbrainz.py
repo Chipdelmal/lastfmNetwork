@@ -24,3 +24,4 @@ mb.set_useragent(KEYS.MB_NM, KEYS.MB_V, KEYS.MB_URL)
 ##############################################################################
 data = pd.read_csv(path.join(PTH_DTA, USERNAME+'_cln.csv'), parse_dates=[3])
 mbz.parseFromMusicbrainz(data, PTH_DTA, USERNAME)
+# mbz.getArtistInfo('John Moreland')

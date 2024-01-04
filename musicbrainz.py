@@ -112,7 +112,7 @@ def parseFromMusicbrainz(
                 # Parse musicbranz database
                 info = getArtistInfo(art, topGenres=topGenres)
                 try:
-                    info = geocodeEntries(info)
+                    # info = geocodeEntries(info)
                     mbWriter.writerow(info)
                     if verbose:
                         txt = '\t* {}/{}: {} [{} - {}]'.format(
