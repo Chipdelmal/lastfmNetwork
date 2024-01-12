@@ -44,11 +44,17 @@ dteCpy = DTA_CLN['Date'].copy()
 DTA_CLN['Interval'] = pd.to_datetime(dteCpy, errors='coerce', utc=True)
 DTA_CLN['Interval'] = DTA_CLN['Interval'].dt.tz_localize(None).dt.to_period('Y')
 ###############################################################################
-# Process Prerequisites
+# Get Sorting
 ###############################################################################
 year = 2024
 freqSort = {}
 for year in range(2012, 2024):
     fltrd = DTA_CLN[DTA_CLN['Interval']==str(year)]
     freqSort[year] = Counter(fltrd['Artist']).most_common()
-    
+###############################################################################
+# Filter top
+###############################################################################
+tops = [freqSort[y][:TOP_ARTISTS] for y in range(2012, 2024)]
+nums = [len(freqSort[y]) for y in range(2012, 2024)]
+names = set([item for row in [[x[0] for x in y] for y in tops] for item in row])
+A_TOP[A_TOP['Artist'].isin(names)]
