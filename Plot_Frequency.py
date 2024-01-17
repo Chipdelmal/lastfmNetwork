@@ -22,7 +22,7 @@ else:
     (USERNAME, PTH_DTA, PTH_CHE, PTH_IMG, TOP, WRAN) = (
         argv[1], argv[2], argv[3], argv[4], int(argv[5]), int(argv[6])
     ) 
-TOP_ARTISTS = 20
+TOP_ARTISTS = 10
 SORTED = True
 ###############################################################################
 # Read Data
@@ -78,3 +78,22 @@ DTA_RNK_TOP = DTA_CNT.loc[list(A_TOP['Artist'][:TOP_ARTISTS])].rank(
     axis=0, ascending=False, method='first'
 ).astype(int)
 DTA_RNK_TOP.loc['Wilco']
+
+(yInts, arts) = (
+    [int(i.year) for i in list(DTA_RNK_TOP.columns)],
+    list(A_TOP['Artist'][:TOP_ARTISTS])
+)
+
+(fig, ax) = plt.subplots(figsize=(15, 4))
+for art in arts:
+    ax.plot(
+        yInts, 
+        [TOP_ARTISTS-i for i in list(DTA_RNK_TOP.loc[art])],
+        zorder=1
+    )
+    ax.scatter(
+        yInts, 
+        [TOP_ARTISTS-i for i in list(DTA_RNK_TOP.loc[art])], 
+        c='w', ec='k', alpha=1, zorder=10
+    )
+ax.set_xlim(min(yInts), max(yInts))
