@@ -79,21 +79,28 @@ DTA_RNK_TOP = DTA_CNT.loc[list(A_TOP['Artist'][:TOP_ARTISTS])].rank(
 ).astype(int)
 DTA_RNK_TOP.loc['Wilco']
 
+COLS = [
+    '#8691AC', '#9BBBCB', '#DBC3A8', '#C8C4E4', 
+    '#F5E4BF', '#DFA145', '#CC8D6F', '#D1C87A'
+]
+
 (yInts, arts) = (
     [int(i.year) for i in list(DTA_RNK_TOP.columns)],
     list(A_TOP['Artist'][:TOP_ARTISTS])
 )
 
 (fig, ax) = plt.subplots(figsize=(15, 4))
-for art in arts:
+for (ix, art) in enumerate(arts):
     ax.plot(
         yInts, 
         [TOP_ARTISTS-i for i in list(DTA_RNK_TOP.loc[art])],
+        c=COLS[ix%len(COLS)], lw=5,
         zorder=1
     )
     ax.scatter(
         yInts, 
         [TOP_ARTISTS-i for i in list(DTA_RNK_TOP.loc[art])], 
-        c='w', ec='k', alpha=1, zorder=10
+        c='w', ec=COLS[ix%len(COLS)], alpha=1, s=75, lw=2,
+        zorder=10
     )
 ax.set_xlim(min(yInts), max(yInts))
