@@ -1,5 +1,5 @@
 ##############################################################################
-# Plot Diversity
+# Plot Frequencies
 #
 ##############################################################################
 
@@ -22,7 +22,8 @@ else:
     (USERNAME, PTH_DTA, PTH_CHE, PTH_IMG, TOP, WRAN) = (
         argv[1], argv[2], argv[3], argv[4], int(argv[5]), int(argv[6])
     ) 
-TOP_ARTISTS = 10
+TOP_ARTISTS = 5
+SORTED = True
 ###############################################################################
 # Read Data
 ###############################################################################
@@ -39,10 +40,18 @@ daysTotal = (tf-to).days+1
 artists = sorted(list(A_TOP['Artist'])) if not SORTED else list(A_TOP['Artist'])
 countsArray = np.zeros([len(artists), daysTotal], dtype=np.int16)
 daysTotals = np.sum(countsArray, axis=0)
-# Daily intervals -------------------------------------------------------------
+# Timely intervals ------------------------------------------------------------
 dteCpy = DTA_CLN['Date'].copy()
 DTA_CLN['Interval'] = pd.to_datetime(dteCpy, errors='coerce', utc=True)
 DTA_CLN['Interval'] = DTA_CLN['Interval'].dt.tz_localize(None).dt.to_period('Y')
+###############################################################################
+# Time counts
+###############################################################################
+DTA_CLN['count'] = pd.Series([1 for _ in range(len(DTA_CLN.index))])
+DTA_CNT = DTA_CLN.pivot_table(
+    index='Artist', columns='Interval', values='count',
+    aggfunc="sum", fill_value=0,
+).rename_axis(None, axis=1).reset_index('Artist').set_index('Artist')
 ###############################################################################
 # Get Sorting
 ###############################################################################
@@ -58,3 +67,8 @@ tops = [freqSort[y][:TOP_ARTISTS] for y in range(2012, 2024)]
 nums = [len(freqSort[y]) for y in range(2012, 2024)]
 names = set([item for row in [[x[0] for x in y] for y in tops] for item in row])
 A_TOP[A_TOP['Artist'].isin(names)]
+###############################################################################
+# Generate Ranking
+###############################################################################
+DTA_RNK = DTA_CNT.rank(axis=0, ascending=False).astype(int)
+DTA_RNK.loc['Pixies']
