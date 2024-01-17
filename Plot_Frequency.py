@@ -22,7 +22,7 @@ else:
     (USERNAME, PTH_DTA, PTH_CHE, PTH_IMG, TOP, WRAN) = (
         argv[1], argv[2], argv[3], argv[4], int(argv[5]), int(argv[6])
     ) 
-TOP_ARTISTS = 25
+TOP_ARTISTS = 20
 SORTED = True
 ###############################################################################
 # Read Data
@@ -70,8 +70,11 @@ A_TOP[A_TOP['Artist'].isin(names)]
 ###############################################################################
 # Generate Ranking
 ###############################################################################
-DTA_RNK = DTA_CNT.rank(axis=0, ascending=False, method='first').astype(int)
-DTA_RNK.loc[list(A_TOP['Artist'][:TOP_ARTISTS])]
+DTA_RNK = DTA_CNT.rank(axis=0, ascending=False, method='min').astype(int)
+DTA_RNK_FULL = DTA_RNK.loc[list(A_TOP['Artist'][:TOP_ARTISTS])]
 
 
-DTA_RNK.loc['Pixies']
+DTA_RNK_TOP = DTA_CNT.loc[list(A_TOP['Artist'][:TOP_ARTISTS])].rank(
+    axis=0, ascending=False, method='first'
+).astype(int)
+DTA_RNK_TOP.loc['Wilco']
