@@ -22,7 +22,7 @@ else:
     (USERNAME, PTH_DTA, PTH_CHE, PTH_IMG, TOP, WRAN) = (
         argv[1], argv[2], argv[3], argv[4], int(argv[5]), int(argv[6])
     ) 
-TOP_ARTISTS = 10
+TOP_ARTISTS = 12
 SORTED = True
 ###############################################################################
 # Read Data
@@ -77,20 +77,21 @@ DTA_RNK_FULL = DTA_RNK.loc[list(A_TOP['Artist'][:TOP_ARTISTS])]
 DTA_RNK_TOP = DTA_CNT.loc[list(A_TOP['Artist'][:TOP_ARTISTS])].rank(
     axis=0, ascending=False, method='first'
 ).astype(int)
+DTA_RNK_TOP = DTA_RNK_TOP.sort_values(by=DTA_RNK_TOP.columns[0])
 DTA_RNK_TOP.loc['Wilco']
 
 COLS = [
     '#8691AC', '#9BBBCB', '#DBC3A8', '#C8C4E4', 
-    '#F5E4BF', '#DFA145', '#CC8D6F', '#D1C87A'
+    '#F5E4BF', '#DFA145', '#CC8D6F', '#D1C87A',
+    '#D3B1C1', '#9FC4E5', '#FFC41A', '#FCC176', '#A1BE7C'
 ]
 
 (yInts, arts) = (
     [int(i.year) for i in list(DTA_RNK_TOP.columns)],
     list(A_TOP['Artist'][:TOP_ARTISTS])
 )
-
 (fig, ax) = plt.subplots(figsize=(15, 4))
-for (ix, art) in enumerate(arts):
+for (ix, art) in enumerate(arts[:]):
     ax.plot(
         yInts, 
         [TOP_ARTISTS-i for i in list(DTA_RNK_TOP.loc[art])],
@@ -104,3 +105,5 @@ for (ix, art) in enumerate(arts):
         zorder=10
     )
 ax.set_xlim(min(yInts), max(yInts))
+ax.set_yticks(range(0, TOP_ARTISTS))
+ax.set_yticklabels(list(DTA_RNK_TOP.index)[::-1])
