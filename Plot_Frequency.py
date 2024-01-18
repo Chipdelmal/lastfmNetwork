@@ -1,6 +1,5 @@
 ##############################################################################
 # Plot Frequencies
-#
 ##############################################################################
 
 import numpy as np
@@ -79,7 +78,9 @@ DTA_RNK_TOP = DTA_CNT.loc[list(A_TOP['Artist'][:TOP_ARTISTS])].rank(
 ).astype(int)
 DTA_RNK_TOP = DTA_RNK_TOP.sort_values(by=DTA_RNK_TOP.columns[0])
 DTA_RNK_TOP.loc['Wilco']
-
+###############################################################################
+# Plot
+###############################################################################
 COLS = [
     '#8691AC', '#9BBBCB', '#DBC3A8', '#C8C4E4', 
     '#F5E4BF', '#DFA145', '#CC8D6F', '#D1C87A',
@@ -90,6 +91,13 @@ COLS = [
     [int(i.year) for i in list(DTA_RNK_TOP.columns)],
     list(A_TOP['Artist'][:TOP_ARTISTS])
 )
+
+artUnsorted = list(DTA_RNK_TOP.index)
+(artSortStart, artSortEnd) = (
+    DTA_RNK_TOP[DTA_RNK_TOP.columns[0]].values,
+    DTA_RNK_TOP[DTA_RNK_TOP.columns[-1]].values
+)
+
 (fig, ax) = plt.subplots(figsize=(15, 4))
 for (ix, art) in enumerate(arts[:]):
     ax.plot(
@@ -105,5 +113,10 @@ for (ix, art) in enumerate(arts[:]):
         zorder=10
     )
 ax.set_xlim(min(yInts), max(yInts))
+ticks = range(0, TOP_ARTISTS)
 ax.set_yticks(range(0, TOP_ARTISTS))
-ax.set_yticklabels(list(DTA_RNK_TOP.index)[::-1])
+ax.set_yticklabels([x for _,x in sorted(zip(artSortStart, artUnsorted))[::-1]])
+ax2 = ax.twinx()
+ax2.set_ylim([0, TOP_ARTISTS])
+ax2.set_yticks(np.arange(0.5, TOP_ARTISTS+0.5))
+ax2.set_yticklabels([x for _,x in sorted(zip(artSortEnd, artUnsorted))[::-1]])
