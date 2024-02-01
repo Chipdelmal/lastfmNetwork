@@ -86,7 +86,7 @@ COLS = [
     '#F5E4BF', '#DFA145', '#CC8D6F', '#D1C87A',
     '#D3B1C1', '#9FC4E5', '#FFC41A', '#FCC176', '#A1BE7C'
 ]
-FONT_SIZE = 14
+FONT_SIZE = 18
 
 (yInts, arts) = (
     [int(i.year) for i in list(DTA_RNK_TOP.columns)],
@@ -103,17 +103,17 @@ artUnsorted = list(DTA_RNK_TOP.index)
     [x for _,x in sorted(zip(artSortEnd, artUnsorted))[::-1]]
 )
 
-(fig, ax) = plt.subplots(figsize=(15, 5))
+(fig, ax) = plt.subplots(figsize=(25, 5))
 for (ix, art) in enumerate(arts[:]):
     if art==HIGHLIGHT:
-        (color, zorder) = ('#000000', 10)
+        (color, zorder, alpha) = ('#000000', 10, 0.75)
     else:
-        (color, zorder) = (COLS[ix%len(COLS)], 1)
+        (color, zorder, alpha) = (COLS[ix%len(COLS)], 1, 0.4)
     ax.plot(
         yInts, 
         [TOP_ARTISTS-i for i in list(DTA_RNK_TOP.loc[art])],
         c=color, lw=5,
-        zorder=zorder, alpha=0.75
+        zorder=zorder, alpha=alpha
     )
     ax.scatter(
         yInts, 
