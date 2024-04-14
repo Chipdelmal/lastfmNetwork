@@ -7,11 +7,15 @@ from os import path
 from sys import argv
 import pandas as pd
 import operator
+import matplotlib as mpl
+import matplotlib.pyplot as plt
+from matplotlib import rcParams
 from functools import reduce
 from collections import Counter, OrderedDict
 import BANS as ban
 import auxiliary as aux
 import CONSTANTS as cst
+# rcParams['path.sketch'] = (1, 100, 100)
 
 if aux.isnotebook():
     (USERNAME, PTH_DTA) = ('chipmaligno', './data')
@@ -80,9 +84,65 @@ for (art, dates) in list(banDict.items()):
 ##############################################################################
 # Total frequencies
 ##############################################################################
+cat = 'Artist'
 frequencies = dict(
-    reduce(operator.add, map(Counter, [dfPre[['Artist']], dfPst['Artist']]))
+    reduce(operator.add, map(Counter, [dfPre[cat], dfPst[cat]]))
 )
-{k: v for k, v in sorted(frequencies.items(), key=lambda item: item[1])[::-1]}
-# data.set_index('Day')
-# data.loc[date(year=2014,month=1,day=1):date(year=2014,month=2,day=1)]
+fDict = {
+    k: v 
+    for k, v in 
+    sorted(frequencies.items(), key=lambda item: item[1])[::-1]
+}
+##############################################################################
+# Plot
+##############################################################################
+COLORS = (
+    '#f72585', '#2614ed', '#f8f7ff', 
+    '#f038ff', '#e2ef70', '#9381ff'
+)
+ARTS = 50
+(XRAN, YRAN) = ((0, 8000), (0-.5, ARTS-0.5))
+
+# plt.xkcd()
+
+mpl.rcParams['font.family'] = ['sans-serif']
+keySort = list(fDict.keys())[:ARTS]
+plt.style.use('dark_background')
+mpl.rcParams['font.size'] = 12
+(fig, ax) = plt.subplots(figsize=(15, 15))
+for (row, key) in enumerate(keySort[::-1]):
+    # Alternating variables --------------------------------------------------
+    clr = COLORS[row%len(COLORS)]
+    even = (row%2==0)
+    (xO, xF) = (
+        (0, fDict[key]) 
+        if even else 
+        (XRAN[1]-fDict[key], XRAN[1])
+    )
+    y = (
+        row
+        if even else
+        ARTS-row
+    )
+    align = ('right' if even else 'left')
+    xText = (xO-250 if even else xF+250)
+    fText = (
+        f'[{ARTS-row:02d}] {key}' 
+        if not even else 
+        f'{key} [{ARTS-row:02d}]'
+    )
+    # Plot lines -------------------------------------------------------------
+    with mpl.rc_context({'path.sketch': (5, 25, 100)}):
+        ax.plot((xO, xF), (y, y), lw=2, color=clr)
+    # ax.plot(xF, y, '>', color=clr)
+    # ax.plot(xO, y, '<', color=clr)
+    ax.text(xText, y, fText, ha=align, va='center')
+ax.vlines(
+    range(*XRAN, 1000), ymin=YRAN[0], ymax=YRAN[1], 
+    color='#ffffff33', ls='--'
+)
+ax.set_axis_off()
+ax.set_xlim(XRAN[0]-500, XRAN[1]+500)
+ax.set_ylim(*YRAN)
+ax.set_facecolor('#000000')
+# ax.set_yscale('log')
