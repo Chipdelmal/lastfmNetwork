@@ -11,7 +11,9 @@ import matplotlib as mpl
 from matplotlib.ticker import EngFormatter
 import matplotlib.pyplot as plt
 from matplotlib import rcParams
+from random import randrange
 from functools import reduce
+import matplotlib.font_manager as fm
 from engineering_notation import EngNumber
 from decimal import Decimal
 from collections import Counter, OrderedDict
@@ -52,7 +54,7 @@ data['Datetime'] = pd.to_datetime(data['Date'], errors='coerce', utc=True)
 data['Day'] = data['Datetime'].dt.tz_localize(None).dt.to_period('D')
 # Post-change ----------------------------------------------------------------
 mask = (data['Day'] > '2000-01-01') & (data['Day'] <= '2050-12-31')
-dfPst = data[mask]
+dfPst = data[mask].drop_duplicates()
 # Pre-change -----------------------------------------------------------------
 mask = (data['Day'] > '1900-01-01') & (data['Day'] < '2000-01-01')
 dfPre = data[mask]
@@ -100,20 +102,22 @@ fDict = {
 # Plot
 ##############################################################################
 COLORS = (
-    '#f72585', '#2614ed', '#f8f7ff', 
-    '#f038ff', '#e2ef70', '#9381ff'
+    '#f72585EE', '#2614edEE', '#f8f7ffEE', 
+    '#f038ffEE', '#e2ef70EE', '#9381ffEE',
+    '#fd796aEE', '#4E85C1EE'
 )
 ARTS = 50
 (XRAN, YRAN) = ((0, 10000), (0-.5, ARTS-0.5))
 ALTERNATE = False
-fmt = EngFormatter()
-# plt.xkcd()
-
+fontsize = 20
+maxYear = max(dfPst['Date']).year
+prop = fm.FontProperties(fname='./fonts/Robgraves-lKYV.ttf')
 mpl.rcParams['font.family'] = ['sans-serif']
-keySort = list(fDict.keys())[:ARTS]
-plt.style.use('dark_background')
 mpl.rcParams['font.size'] = 12
-(fig, ax) = plt.subplots(figsize=(15, 15))
+keySort = list(fDict.keys())[:ARTS]
+
+plt.style.use('dark_background')
+(fig, ax) = plt.subplots(figsize=(20, 20))
 for (row, key) in enumerate(keySort[::-1]):
     # Alternating variables --------------------------------------------------
     clr = COLORS[row%len(COLORS)]
@@ -141,24 +145,36 @@ for (row, key) in enumerate(keySort[::-1]):
         xText = (xO-250 if even else xF+250)
         fText = f'{key}'
     # Plot lines -------------------------------------------------------------
-    with mpl.rc_context({'path.sketch': (5, 25, 100)}):
-        ax.plot((xO, xF), (y, y), lw=2, color=clr)
+    with mpl.rc_context({'path.sketch': (8, 0.1, 100)}):
+        ax.plot((xO+randrange(-25, 25), xF), (y, y), lw=2, color=clr)
     # ax.plot(xF, y, '>', color=clr)
     # ax.plot(xO, y, '<', color=clr)
-    ax.text(xText, y, fText, ha=align, va='center')
+    ax.text(
+        xText, y, fText, 
+        ha=align, va='center', 
+        fontproperties=prop, fontsize=fontsize,
+        color='#ffffffee'
+    )
     if not ALTERNATE:
         ax.text(
             fDict[key]+250, y, 
             str(EngNumber(fDict[key])),
-            ha='left', va='center', style='normal'
-            
+            ha='left', va='center', style='normal',
+            fontproperties=prop, fontsize=fontsize
         )
-ax.vlines(
-    range(*XRAN, 1000), ymin=YRAN[0], ymax=YRAN[1], 
-    color='#ffffff33', ls='--'
+with mpl.rc_context({'path.sketch': (2, 0.1, 100)}):
+    for x in range(XRAN[0], XRAN[1]+500, 1000):
+        ax.plot(
+            (x, x), YRAN, 
+            color='#ffffff55', ls='--'
+        )
+ax.text(
+    .65, .2, f'Top {ARTS} {cat}s\n2005-{maxYear}',
+    fontproperties=prop, fontsize=75,
+    transform=ax.transAxes, rotation=25,
+    color='#ffffffEE', ha='center', va='center'
 )
 ax.set_axis_off()
 ax.set_xlim(XRAN[0]-500, XRAN[1]+500)
 ax.set_ylim(*YRAN)
 ax.set_facecolor('#000000')
-# ax.set_yscale('log')
