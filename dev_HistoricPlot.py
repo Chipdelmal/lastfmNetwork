@@ -8,9 +8,12 @@ from sys import argv
 import pandas as pd
 import operator
 import matplotlib as mpl
+from matplotlib.ticker import EngFormatter
 import matplotlib.pyplot as plt
 from matplotlib import rcParams
 from functools import reduce
+from engineering_notation import EngNumber
+from decimal import Decimal
 from collections import Counter, OrderedDict
 import BANS as ban
 import auxiliary as aux
@@ -101,8 +104,9 @@ COLORS = (
     '#f038ff', '#e2ef70', '#9381ff'
 )
 ARTS = 50
-(XRAN, YRAN) = ((0, 8000), (0-.5, ARTS-0.5))
-
+(XRAN, YRAN) = ((0, 10000), (0-.5, ARTS-0.5))
+ALTERNATE = False
+fmt = EngFormatter()
 # plt.xkcd()
 
 mpl.rcParams['font.family'] = ['sans-serif']
@@ -113,7 +117,7 @@ mpl.rcParams['font.size'] = 12
 for (row, key) in enumerate(keySort[::-1]):
     # Alternating variables --------------------------------------------------
     clr = COLORS[row%len(COLORS)]
-    even = (row%2==0)
+    even = ((row%2==0) if ALTERNATE else True)
     (xO, xF) = (
         (0, fDict[key]) 
         if even else 
@@ -124,19 +128,31 @@ for (row, key) in enumerate(keySort[::-1]):
         if even else
         ARTS-row
     )
-    align = ('right' if even else 'left')
-    xText = (xO-250 if even else xF+250)
-    fText = (
-        f'[{ARTS-row:02d}] {key}' 
-        if not even else 
-        f'{key} [{ARTS-row:02d}]'
-    )
+    if ALTERNATE:
+        align = ('right' if even else 'left')
+        xText = (xO-250 if even else xF+250)
+        fText = (
+            f'[{ARTS-row:02d}] {key}' 
+            if not even else 
+            f'{key} [{ARTS-row:02d}]'
+        )
+    else:
+        align = ('right' if even else 'left')
+        xText = (xO-250 if even else xF+250)
+        fText = f'{key}'
     # Plot lines -------------------------------------------------------------
     with mpl.rc_context({'path.sketch': (5, 25, 100)}):
         ax.plot((xO, xF), (y, y), lw=2, color=clr)
     # ax.plot(xF, y, '>', color=clr)
     # ax.plot(xO, y, '<', color=clr)
     ax.text(xText, y, fText, ha=align, va='center')
+    if not ALTERNATE:
+        ax.text(
+            fDict[key]+250, y, 
+            str(EngNumber(fDict[key])),
+            ha='left', va='center', style='normal'
+            
+        )
 ax.vlines(
     range(*XRAN, 1000), ymin=YRAN[0], ymax=YRAN[1], 
     color='#ffffff33', ls='--'
