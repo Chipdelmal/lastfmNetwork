@@ -8,24 +8,21 @@ from sys import argv
 import pandas as pd
 import operator
 import matplotlib as mpl
-from matplotlib.ticker import EngFormatter
 import matplotlib.pyplot as plt
-from matplotlib import rcParams
 from random import randrange
+from random import choice
 from functools import reduce
 import matplotlib.font_manager as fm
 from engineering_notation import EngNumber
-from decimal import Decimal
 from collections import Counter, OrderedDict
 import BANS as ban
 import auxiliary as aux
 import CONSTANTS as cst
-# rcParams['path.sketch'] = (1, 100, 100)
 
 if aux.isnotebook():
-    (USERNAME, PTH_DTA) = ('chipmaligno', './data')
+    (USERNAME, PTH_DTA, PTH_IMG, CAT) = ('chipmaligno', './data', './img', 'Artist')
 else:
-    (USERNAME, PTH_DTA) = argv[1:]
+    (USERNAME, PTH_DTA, PTH_IMG, CAT) = argv[1:]
 ##############################################################################
 # Read and shape CSV
 ##############################################################################
@@ -89,10 +86,23 @@ for (art, dates) in list(banDict.items()):
 ##############################################################################
 # Total frequencies
 ##############################################################################
-cat = 'Artist'
-frequencies = dict(
-    reduce(operator.add, map(Counter, [dfPre[cat], dfPst[cat]]))
-)
+if CAT=='Artist':
+    frequencies = dict(
+        reduce(operator.add, map(Counter, [dfPre[CAT], dfPst[CAT]]))
+    )
+elif (CAT=='Album') or (CAT=='Song'):
+    pre = [
+        '{} ({})'.format(str(row[0]).title(), str(row[1]).title()) 
+        for (_, row) in dfPre[[CAT, 'Artist']].iterrows()
+    ]
+    pst = [
+        '{} ({})'.format(str(row[0]).title(), str(row[1]).title()) 
+        for (_, row) in dfPst[[CAT, 'Artist']].iterrows()
+    ]
+    frequencies = dict(
+        reduce(operator.add, map(Counter, [pre, pst]))
+    )   
+    
 fDict = {
     k: v 
     for k, v in 
@@ -106,8 +116,9 @@ COLORS = (
     '#f038ffEE', '#e2ef70EE', '#9381ffEE',
     '#fd796aEE', '#4E85C1EE'
 )
+OPACITY = ('BB', 'AA')
 ARTS = 50
-(XRAN, YRAN) = ((0, 10000), (0-.5, ARTS-0.5))
+(XRAN, YRAN) = ((0, 8000), (0-.5, ARTS-0.5))
 ALTERNATE = False
 fontsize = 20
 maxYear = max(dfPst['Date']).year
@@ -120,7 +131,7 @@ plt.style.use('dark_background')
 (fig, ax) = plt.subplots(figsize=(20, 20))
 for (row, key) in enumerate(keySort[::-1]):
     # Alternating variables --------------------------------------------------
-    clr = COLORS[row%len(COLORS)]
+    clr = COLORS[row%len(COLORS)][:-2]+choice(OPACITY)
     even = ((row%2==0) if ALTERNATE else True)
     (xO, xF) = (
         (0, fDict[key]) 
@@ -145,31 +156,32 @@ for (row, key) in enumerate(keySort[::-1]):
         xText = (xO-250 if even else xF+250)
         fText = f'{key}'
     # Plot lines -------------------------------------------------------------
-    with mpl.rc_context({'path.sketch': (8, 0.1, 100)}):
+    with mpl.rc_context({'path.sketch': (8, 0.05, 1000)}):
         ax.plot((xO+randrange(-25, 25), xF), (y, y), lw=2, color=clr)
     # ax.plot(xF, y, '>', color=clr)
     # ax.plot(xO, y, '<', color=clr)
     ax.text(
-        xText, y, fText, 
+        xText+randrange(0, 50), y, fText, 
         ha=align, va='center', 
         fontproperties=prop, fontsize=fontsize,
-        color='#ffffffee'
+        color='#ffffff'+choice(OPACITY)
     )
     if not ALTERNATE:
         ax.text(
             fDict[key]+250, y, 
             str(EngNumber(fDict[key])),
             ha='left', va='center', style='normal',
-            fontproperties=prop, fontsize=fontsize
+            fontproperties=prop, fontsize=fontsize,
+            color='#ffffff'+choice(OPACITY)
         )
 with mpl.rc_context({'path.sketch': (2, 0.1, 100)}):
     for x in range(XRAN[0], XRAN[1]+500, 1000):
         ax.plot(
             (x, x), YRAN, 
-            color='#ffffff55', ls='--'
+            color='#ffffff55' #, ls='--'
         )
 ax.text(
-    .65, .2, f'Top {ARTS} {cat}s\n2005-{maxYear}',
+    .65, .2, f'Top {ARTS} {CAT}s\n2005-{maxYear}',
     fontproperties=prop, fontsize=75,
     transform=ax.transAxes, rotation=25,
     color='#ffffffEE', ha='center', va='center'
@@ -178,3 +190,8 @@ ax.set_axis_off()
 ax.set_xlim(XRAN[0]-500, XRAN[1]+500)
 ax.set_ylim(*YRAN)
 ax.set_facecolor('#000000')
+plt.savefig(
+    path.join(PTH_IMG, f'Frequencies_{CAT}'),
+    transparent=False, facecolor='k', 
+    bbox_inches='tight'
+)
