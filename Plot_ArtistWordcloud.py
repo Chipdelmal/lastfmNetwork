@@ -52,7 +52,7 @@ fontFile = path.join(PTH_FNT, 'Prompt-Thin.ttf')
 fontPath = fontFile if path.exists(fontFile) else None
 wordcloudDef = WordCloud(
     width=WIDTH, height=HEIGHT, max_words=2000,
-    relative_scaling=.5, min_font_size=9, font_path=fontPath,
+    relative_scaling=.5, min_font_size=4, font_path=fontPath,
     background_color="rgba(1, 1, 1, 0)", mode='RGBA',
     colormap=cst.WORDCLOUD_MAP
 )

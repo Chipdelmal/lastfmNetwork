@@ -20,7 +20,7 @@ import auxiliary as aux
 import CONSTANTS as cst
 
 if aux.isnotebook():
-    (USERNAME, PTH_DTA, PTH_IMG, CAT) = ('chipmaligno', './data', './img', 'Artist')
+    (USERNAME, PTH_DTA, PTH_IMG, CAT) = ('chipmaligno', './data', './img', 'Album')
 else:
     (USERNAME, PTH_DTA, PTH_IMG, CAT) = argv[1:]
 ##############################################################################
@@ -90,6 +90,7 @@ if CAT=='Artist':
     frequencies = dict(
         reduce(operator.add, map(Counter, [dfPre[CAT], dfPst[CAT]]))
     )
+    xmax = 7000
 elif (CAT=='Album') or (CAT=='Song'):
     pre = [
         '{} ({})'.format(str(row[0]).title(), str(row[1]).title()) 
@@ -101,8 +102,8 @@ elif (CAT=='Album') or (CAT=='Song'):
     ]
     frequencies = dict(
         reduce(operator.add, map(Counter, [pre, pst]))
-    )   
-    
+    ) 
+    xmax = 7000 
 fDict = {
     k: v 
     for k, v in 
@@ -118,7 +119,7 @@ COLORS = (
 )
 OPACITY = ('BB', 'AA')
 ARTS = 50
-(XRAN, YRAN) = ((0, 8000), (0-.5, ARTS-0.5))
+(XRAN, YRAN) = ((0, xmax), (0-.5, ARTS-0.5))
 ALTERNATE = False
 fontsize = 20
 maxYear = max(dfPst['Date']).year
